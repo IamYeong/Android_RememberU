@@ -2,6 +2,9 @@ plugins {
     id 'com.android.application'
 }
 
+//git init 때 생성된 .gitignore 파일이 .gradle 확장자 파일은 remote repository 에 올리지 않는다고 명시하고 있으므로
+//이 곳에 민감한 정보를 작성해놓아도 문제가 없음.
+//...
 android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"

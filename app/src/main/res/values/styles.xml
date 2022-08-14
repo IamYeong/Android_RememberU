@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MyTextView" parent="@style/Widget.AppCompat.TextView">
+
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+
+        <item name="android:textColor">@color/text</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+
+    <style name="MyButton" parent="@style/Widget.AppCompat.Button">
+
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+
+        <item name="android:textColor">@color/text</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+
+    <style name="MyEditText" parent="@style/Widget.AppCompat.EditText">
+
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+
+        <item name="android:textColor">@color/text</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+
+    <style name="MyCheckBox" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+
+    <style name="MyRadioButton" parent="@style/Widget.AppCompat.CompoundButton.RadioButton">
+
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+</resources>

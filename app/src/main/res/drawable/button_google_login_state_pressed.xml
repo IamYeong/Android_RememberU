@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+
+        <shape
+            android:shape="rectangle"
+            >
+
+            <corners
+                android:radius="2dp"
+                />
+
+            <solid
+                android:color="@color/google_login_pressed"
+                />
+
+        </shape>
+
+    </item>
+
+    <item
+        android:drawable="@drawable/ic_btn_google_light_pressed"
+        android:gravity="start|center_vertical"
+
+        >
+
+
+    </item>
+
+</layer-list>

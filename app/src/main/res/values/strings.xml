@@ -7,6 +7,13 @@
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
 
+    <!-- login -->
+    <string name="login">로그인</string>
+    <string name="email">이메일</string>
+    <string name="password">비밀번호</string>
+    <string name="google">Google</string>
+    <string name="google_login">구글계정으로 로그인</string>
+    <string name="email_login">이메일 계정으로 로그인</string>
 
 
 </resources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".auth.AuthActivity"
+    android:background="@color/background"
+    android:orientation="vertical"
+
+    android:gravity="center_vertical"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/email_login"
+
+        android:gravity="start"
+        android:layout_marginHorizontal="20dp"
+        />
+
+    <EditText
+        android:id="@+id/et_email_login"
+        android:layout_width="match_parent"
+        style="@style/MyEditText"
+        android:background="@drawable/field_shape"
+        android:layout_marginHorizontal="20dp"
+        android:hint="@string/email"
+        android:layout_marginTop="5dp"
+
+        />
+
+    <EditText
+        android:id="@+id/et_password_login"
+        android:layout_width="match_parent"
+        style="@style/MyEditText"
+        android:background="@drawable/field_shape"
+        android:layout_marginHorizontal="20dp"
+
+        android:layout_marginTop="5dp"
+        android:hint="@string/password"
+
+        />
+
+
+
+
+    <android.widget.Button
+        android:id="@+id/btn_email_login"
+        android:layout_width="match_parent"
+        style="@style/MyButton"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_default_active"
+        android:textColor="@color/background"
+        android:text="@string/login"
+        android:elevation="3dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/google_login"
+
+        android:gravity="start"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        />
+
+    <android.widget.Button
+        android:id="@+id/btn_google_login"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_google_active"
+        android:text="@string/google"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:textColor="@color/google_font"
+        android:elevation="3dp"
+        />
+
+</LinearLayout>

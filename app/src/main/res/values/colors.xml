@@ -7,4 +7,11 @@
     <color name="secondary">#E69FFF</color>
     <color name="sub">#FAE4FF</color>
 
+    <color name="field">#FFFFFF</color>
+
+    <color name="google_login_normal">#FFFFFF</color>
+    <color name="google_login_pressed">#EEEEEE</color>
+    <color name="google_login_focus">#4285F4</color>
+    <color name="google_font">#8A000000</color>
+
 </resources>

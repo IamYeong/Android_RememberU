@@ -15,6 +15,8 @@
     <string name="google">Google</string>
     <string name="google_login">구글계정으로 로그인</string>
     <string name="email_login">이메일 계정으로 로그인</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

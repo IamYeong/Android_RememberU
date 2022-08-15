@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
@@ -11,10 +12,15 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView nameText;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        nameText = findViewById(R.id.tv_name_main);
 
     }
 
@@ -22,9 +28,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Log.e(getClass().getSimpleName(), email);
-        Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            String accountInfo = mAuth.getCurrentUser().getDisplayName() + "(" + mAuth.getCurrentUser().getEmail() + ")";
+            nameText.setText(accountInfo);
+        }
+
     }
 
     @Override

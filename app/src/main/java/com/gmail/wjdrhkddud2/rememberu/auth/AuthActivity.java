@@ -87,6 +87,8 @@ public class AuthActivity extends AppCompatActivity {
                 SharedPreferencesManager.setUserEmail(AuthActivity.this, email);
                 SharedPreferencesManager.setUserEmailPassword(AuthActivity.this, password);
 
+
+
             }
         });
 

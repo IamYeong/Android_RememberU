@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RememberU">
-        <activity android:name=".auth.AuthActivity"></activity>
+        <activity android:name=".setting.SettingActivity"
+            ></activity>
+        <activity android:name=".auth.AuthActivity" />
         <activity
             android:name=".splash.SplashActivity"
             android:exported="true">
@@ -23,7 +25,7 @@
         </activity>
         <activity
             android:name=".main.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

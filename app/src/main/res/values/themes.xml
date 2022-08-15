@@ -12,6 +12,13 @@
         <item name="android:editTextStyle">@style/MyEditText</item>
         <item name="android:radioButtonStyle">@style/MyRadioButton</item>
         <item name="android:checkboxStyle">@style/MyCheckBox</item>
+
+        <!-- Activity Animation -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowEnterAnimation">@null</item>
+        <item name="android:windowExitAnimation">@null</item>
+        <item name="android:windowHideAnimation">@null</item>
+        <item name="android:windowShowAnimation">@null</item>
     </style>
 
 </resources>

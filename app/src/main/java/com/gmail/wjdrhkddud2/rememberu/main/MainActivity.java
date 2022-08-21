@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,10 +29,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private TextView nameText, countText;
-    private ImageButton settingButton;
+    private ImageButton settingButton, addButton;
     private FirebaseAuth mAuth;
-    private RecyclerView bookmarkRV;
+    private RecyclerView bookmarkRV, searchRV;
     private BookmarkPersonAdapter bookmarksAdapter;
+    private ResultPersonAdapter resultsAdapter;
+
+    private EditText searchField;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -43,15 +47,24 @@ public class MainActivity extends AppCompatActivity {
         nameText = findViewById(R.id.tv_name_main);
         countText = findViewById(R.id.tv_count_main);
         settingButton = findViewById(R.id.img_btn_go_to_setting);
+        addButton = findViewById(R.id.img_btn_add_main);
+        searchField = findViewById(R.id.et_search_main);
 
         bookmarkRV = findViewById(R.id.rv_bookmark_main);
+        searchRV = findViewById(R.id.rv_search_main);
 
         bookmarksAdapter = new BookmarkPersonAdapter(MainActivity.this);
+        resultsAdapter = new ResultPersonAdapter(MainActivity.this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         bookmarkRV.setLayoutManager(linearLayoutManager);
         bookmarkRV.setAdapter(bookmarksAdapter);
+
+        LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(MainActivity.this);
+        verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        searchRV.setLayoutManager(verticalLayoutManager);
+        searchRV.setAdapter(resultsAdapter);
 
 
         settingButton.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
                 //overridePendingTransition(0, 0);
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
             }
         });
 
@@ -94,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 people2.add(person);
             }
             bookmarksAdapter.setPeople(people2);
+            resultsAdapter.setPeople(people2);
 
 
         } else {

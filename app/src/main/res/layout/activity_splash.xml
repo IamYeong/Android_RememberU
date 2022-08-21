@@ -11,7 +11,7 @@
 
     <ImageView
         android:id="@+id/img_splash_icon"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         app:layout_constraintTop_toTopOf="parent"
@@ -19,39 +19,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
 
-        android:src="@drawable/ic_splash_icon"
-        android:layout_marginBottom="100dp"
+        android:src="@mipmap/ic_launcher"
         />
 
-    <TextView
-        android:id="@+id/tv_splash_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/secondary"
-
-        app:layout_constraintTop_toBottomOf="@id/img_splash_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        android:text="@string/remember"
-        android:textSize="30sp"
-        />
-
-    <TextView
-        android:id="@+id/tv_splash_sub_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/secondary"
-
-        app:layout_constraintTop_toBottomOf="@id/tv_splash_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        android:text="@string/u"
-        android:textSize="40sp"
-
-        android:fontFamily="@font/nanum_barun_gothic_bold"
-        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

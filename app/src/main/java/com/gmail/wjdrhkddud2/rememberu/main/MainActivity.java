@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
-            String accountInfo = mAuth.getCurrentUser().getDisplayName() + "(" + mAuth.getCurrentUser().getEmail() + ")";
+            String accountInfo = mAuth.getCurrentUser().getDisplayName() + "(" + mAuth.getCurrentUser().getEmail() + ")\n" + mAuth.getCurrentUser().getUid();
             nameText.setText(accountInfo);
         }
 

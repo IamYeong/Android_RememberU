@@ -8,6 +8,8 @@
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
 
+    <string name="not_auth">인증정보가 없습니다</string>
+
     <!-- login -->
     <string name="login">로그인</string>
     <string name="email">이메일</string>
@@ -18,6 +20,18 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Main -->
+    <string name="friends">friends</string>
+    <string name="memories">memories</string>
+    <string name="marks">즐겨찾기 목록</string>
+    <string name="all">모든 목록</string>
+    <string name="filter">필터</string>
+    <string name="sort_name">이름순</string>
+    <string name="sort_birth">나이순</string>
+    <string name="sort_latest">최근 추가순</string>
+    <string name="results">검색결과</string>
+    <string name="name">이름</string>
+    <string name="others">기타</string>
 
     <!-- setting -->
     <string name="setting">설정</string>

@@ -1,9 +1,13 @@
 package com.gmail.wjdrhkddud2.rememberu.main;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -11,14 +15,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
+import com.gmail.wjdrhkddud2.rememberu.auth.AuthActivity;
+import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
+import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
+import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
 import com.gmail.wjdrhkddud2.rememberu.setting.SettingActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    private TextView nameText;
+    private TextView nameText, countText;
     private ImageButton settingButton;
     private FirebaseAuth mAuth;
+    private RecyclerView bookmarkRV;
+    private BookmarkPersonAdapter bookmarksAdapter;
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +41,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         nameText = findViewById(R.id.tv_name_main);
+        countText = findViewById(R.id.tv_count_main);
         settingButton = findViewById(R.id.img_btn_go_to_setting);
+
+        bookmarkRV = findViewById(R.id.rv_bookmark_main);
+
+        bookmarksAdapter = new BookmarkPersonAdapter(MainActivity.this);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        bookmarkRV.setLayoutManager(linearLayoutManager);
+        bookmarkRV.setAdapter(bookmarksAdapter);
+
 
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,9 +70,42 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         mAuth = FirebaseAuth.getInstance();
+
         if (mAuth.getCurrentUser() != null) {
-            String accountInfo = mAuth.getCurrentUser().getDisplayName() + "(" + mAuth.getCurrentUser().getEmail() + ")\n" + mAuth.getCurrentUser().getUid();
-            nameText.setText(accountInfo);
+
+            RememberUDatabase db = RememberUDatabase.getInstance(MainActivity.this);
+            String uid = mAuth.getCurrentUser().getUid();
+            List<Person> people = db.personDao().selectAll(uid);
+            List<Memo> memo = db.memoDao().selectAll(uid);
+
+
+            String accountInfo = people.size() + " " + getString(R.string.friends) + "   " + memo.size() + " " + getString(R.string.memories);
+            nameText.setText( mAuth.getCurrentUser().getDisplayName());
+            countText.setText(accountInfo);
+
+            List<Person> people2 = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                Person person = new Person("0123456" + i);
+                person.setName("김철수");
+                person.setBookmark(true);
+                person.setUid(mAuth.getCurrentUser().getUid());
+                person.setPhoneNumber("010-0000-0000");
+
+                people2.add(person);
+            }
+            bookmarksAdapter.setPeople(people2);
+
+
+        } else {
+
+            /*
+            Toast.makeText(this, getString(R.string.not_auth), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+            startActivity(intent);
+            finish();
+
+             */
+
         }
 
     }
@@ -69,5 +128,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+
     }
 }

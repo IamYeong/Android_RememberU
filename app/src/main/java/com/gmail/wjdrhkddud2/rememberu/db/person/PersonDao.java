@@ -20,8 +20,8 @@ public interface PersonDao {
     @Update
     void update(Person person);
 
-    @Query("SELECT * FROM PERSON")
-    List<Person> selectAll();
+    @Query("SELECT * FROM PERSON WHERE uid = :uid")
+    List<Person> selectAll(String uid);
 
 
 

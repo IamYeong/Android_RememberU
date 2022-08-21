@@ -7,9 +7,17 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
+import com.gmail.wjdrhkddud2.rememberu.db.user.User;
 
 @Entity(tableName = "memo",
         foreignKeys = {
+        @ForeignKey(
+                entity = User.class,
+                parentColumns = "uid",
+                childColumns = "uid",
+                onUpdate = ForeignKey.CASCADE,
+                onDelete = ForeignKey.CASCADE
+        ),
         @ForeignKey(
                 entity = Person.class,
                 parentColumns = "hashed",
@@ -35,6 +43,9 @@ public class Memo {
     //uid + person hash + title + yyyy.mm.dd hh:mm:ss
     @ColumnInfo(name = "hashed")
     private String hashed;
+
+    @ColumnInfo(name = "uid")
+    private String uid;
 
     @ColumnInfo(name = "person_hashed")
     private String personHashed;
@@ -62,6 +73,14 @@ public class Memo {
 
     public int getId() {
         return id;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getHashed() {

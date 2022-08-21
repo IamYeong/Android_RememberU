@@ -122,11 +122,4 @@ public class Person {
         this.gender = gender;
     }
 
-    public boolean isBookmarked() {
-        return bookmark;
-    }
-
-    public void setBookmarked(boolean bookmark) {
-        this.bookmark = bookmark;
-    }
 }

@@ -21,4 +21,7 @@ public interface UserDao {
     @Query("SELECT * FROM USER WHERE uid == :uid")
     User select(String uid);
 
+    @Query("SELECT EXISTS(SELECT * FROM USER WHERE uid = :uid)")
+    boolean isExist(String uid);
+
 }

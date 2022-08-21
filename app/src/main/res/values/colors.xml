@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="text">#606060</color>
     <color name="background">#F8F8F8</color>
 
@@ -13,5 +14,7 @@
     <color name="google_login_pressed">#EEEEEE</color>
     <color name="google_login_focus">#4285F4</color>
     <color name="google_font">#8A000000</color>
+
+    <color name="accent">#FFFFFF</color>
 
 </resources>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraint_card_bookmark_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="240dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:background="@drawable/item_card"
+    android:backgroundTint="@color/accent"
+
+    android:layout_marginEnd="20dp"
+    >
+
+    <TextView
+        android:id="@+id/tv_bookmark_name_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="15dp"
+
+        android:text="test"
+        />
+
+    <ImageButton
+        android:id="@+id/img_btn_bookmark_main_bookmark_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        android:src="@drawable/selector_bookmark"
+        android:background="@null"
+
+        android:padding="10dp"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_bookmark_content_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="15dp"
+
+        android:text="test"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

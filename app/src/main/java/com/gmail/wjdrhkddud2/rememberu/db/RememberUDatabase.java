@@ -14,6 +14,7 @@ import com.gmail.wjdrhkddud2.rememberu.db.memo.MemoDao;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
 import com.gmail.wjdrhkddud2.rememberu.db.person.PersonDao;
 import com.gmail.wjdrhkddud2.rememberu.db.user.User;
+import com.gmail.wjdrhkddud2.rememberu.db.user.UserDao;
 
 @Database(entities = {User.class, Person.class, Memo.class}, version = 1)
 public abstract class RememberUDatabase extends RoomDatabase {
@@ -22,6 +23,7 @@ public abstract class RememberUDatabase extends RoomDatabase {
 
     public abstract PersonDao personDao();
     public abstract MemoDao memoDao();
+    public abstract UserDao userDao();
 
     public synchronized static RememberUDatabase getInstance(Context context) {
 
@@ -50,6 +52,7 @@ public abstract class RememberUDatabase extends RoomDatabase {
 
                     //.addMigrations()
                     //.createFromAsset()
+                    .allowMainThreadQueries()
                     .build();
 
             return instance;

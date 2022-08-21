@@ -18,6 +18,8 @@ import android.widget.EditText;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
+import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
+import com.gmail.wjdrhkddud2.rememberu.db.user.User;
 import com.gmail.wjdrhkddud2.rememberu.main.MainActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
@@ -125,13 +127,16 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        mAuth = FirebaseAuth.getInstance();
+        updateUI(mAuth.getCurrentUser());
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+
 
     }
 
@@ -171,7 +176,13 @@ public class AuthActivity extends AppCompatActivity {
             Log.e(getClass().getSimpleName(), "null");
             return;
         }
-        Log.e(getClass().getSimpleName(), user.getEmail());
+
+        RememberUDatabase db = RememberUDatabase.getInstance(AuthActivity.this);
+        boolean isExist = db.userDao().isExist(user.getUid());
+        Log.e(getClass().getSimpleName(), user.getEmail() + ", " + isExist);
+        if (!isExist) {
+            db.userDao().insert(new User(user.getUid()));
+        }
 
         SharedPreferencesManager.setUserEmail(AuthActivity.this, user.getEmail());
         SharedPreferencesManager.setUserName(AuthActivity.this, user.getDisplayName());

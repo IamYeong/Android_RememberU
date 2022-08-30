@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
+import com.gmail.wjdrhkddud2.rememberu.add.NewPersonActivity;
 import com.gmail.wjdrhkddud2.rememberu.auth.AuthActivity;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
@@ -80,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
+                Intent intent = new Intent(MainActivity.this, NewPersonActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -153,5 +156,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
 
+    }
+
+
+    private List<Person> selectContacts() {
+
+        //Cursor
+        return null;
     }
 }

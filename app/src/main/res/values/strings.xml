@@ -33,6 +33,9 @@
     <string name="name">이름</string>
     <string name="others">기타</string>
 
+    <!-- Add person -->
+    <string name="new_person">인물 추가</string>
+
     <!-- setting -->
     <string name="setting">설정</string>
 

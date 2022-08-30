@@ -3,6 +3,7 @@
     package="com.gmail.wjdrhkddud2.rememberu">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -11,8 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RememberU">
-        <activity android:name=".setting.SettingActivity"
-            ></activity>
+        <activity android:name=".add.NewPersonActivity"></activity>
+        <activity android:name=".setting.SettingActivity" />
         <activity android:name=".auth.AuthActivity" />
         <activity
             android:name=".splash.SplashActivity"

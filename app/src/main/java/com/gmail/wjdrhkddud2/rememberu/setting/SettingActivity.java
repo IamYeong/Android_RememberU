@@ -42,9 +42,9 @@ public class SettingActivity extends AppCompatActivity {
                     new ActivityResultCallback<Boolean>() {
                         @Override
                         public void onActivityResult(Boolean result) {
+                            Log.e(getClass().getSimpleName(), result + "");
 
-                            Log.e(getClass().getSimpleName(), result  + "");
-
+                            if (!result) shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
                         }
                     }
             );
@@ -76,17 +76,15 @@ public class SettingActivity extends AppCompatActivity {
                    selectContacts(handler, new Runnable() {
                        @Override
                        public void run() {
-                           Snackbar snackbar = Snackbar.make(SettingActivity.this, settingLayout, "dd", Snackbar.LENGTH_SHORT);
+                           Snackbar snackbar = Snackbar.make(SettingActivity.this, settingLayout, getString(R.string.all), Snackbar.LENGTH_LONG);
                            snackbar.show();
                        }
                    });
                } else {
 
-                   boolean a = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
-                   Log.e(getClass().getSimpleName(), a + "");
+                   permissionLauncher.launch(Manifest.permission.READ_CONTACTS);
+                   //boolean a = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
 
-                   if (a) permissionLauncher.launch(Manifest.permission.READ_CONTACTS);
-                   else permissionLauncher.launch(Manifest.permission.READ_CONTACTS);
                }
 
                //

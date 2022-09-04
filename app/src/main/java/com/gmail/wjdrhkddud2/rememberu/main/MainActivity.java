@@ -30,7 +30,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView nameText, countText;
+    private TextView nameText, countText, filterText, sortText;
     private ImageButton settingButton, addButton;
     private FirebaseAuth mAuth;
     private RecyclerView bookmarkRV, searchRV;
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         nameText = findViewById(R.id.tv_name_main);
         countText = findViewById(R.id.tv_count_main);
+        filterText = findViewById(R.id.tv_filter_main);
+        sortText = findViewById(R.id.tv_sort_main);
         settingButton = findViewById(R.id.img_btn_go_to_setting);
         addButton = findViewById(R.id.img_btn_add_main);
         searchField = findViewById(R.id.et_search_main);
@@ -68,6 +70,19 @@ public class MainActivity extends AppCompatActivity {
         searchRV.setLayoutManager(verticalLayoutManager);
         searchRV.setAdapter(resultsAdapter);
 
+        filterText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        sortText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override

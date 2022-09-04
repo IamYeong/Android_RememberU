@@ -28,6 +28,24 @@ public class SplashActivity extends AppCompatActivity {
 
     private List<String> deniedPermissions = new ArrayList<>();
 
+    private ActivityResultLauncher<String> permissionLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    new ActivityResultCallback<Boolean>() {
+                        @Override
+                        public void onActivityResult(Boolean result) {
+
+                            if (result) {
+                                //동의했을 때
+                            } else {
+                                //거부했을 때
+                                //permissionLauncher.launch(Manifest.permission.READ_CONTACTS);
+                            }
+
+                        }
+                    }
+            );
+
     private ActivityResultLauncher<String[]> activityResultLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.RequestMultiplePermissions(),
@@ -77,6 +95,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -104,10 +123,17 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
+                        Intent intent = new Intent(SplashActivity.this, AuthActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                        /*
                         permissions = new String[] {
-                                Manifest.permission.READ_CONTACTS
+                                //Manifest.permission.READ_CONTACTS
                         };
                         activityResultLauncher.launch(permissions);
+
+                         */
                     }
                 });
 

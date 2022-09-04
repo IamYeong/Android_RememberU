@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tv_name_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+
+        android:text="이름"
+        />
+
+    <TextView
+        android:id="@+id/tv_email_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toBottomOf="@id/tv_name_setting"
+        app:layout_constraintBottom_toTopOf="@id/line_account"
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:text="E-mail"
+
+        android:layout_marginTop="5dp"
+        />
+
+    <View
+        android:id="@+id/line_account"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/text"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_email_setting"
+        android:layout_marginVertical="20dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

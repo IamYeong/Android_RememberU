@@ -2,6 +2,7 @@
 <resources>
 
     <color name="text">#606060</color>
+    <color name="text_strong">#383838</color>
     <color name="background">#F8F8F8</color>
 
     <color name="primary">#BB77FF</color>

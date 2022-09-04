@@ -6,7 +6,7 @@
         />
 
     <solid
-        android:color="@color/secondary"
+        android:color="@color/sub"
         />
 
 </shape>

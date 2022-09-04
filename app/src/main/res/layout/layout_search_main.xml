@@ -87,7 +87,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/add"
-            android:background="@drawable/item_primary_circle_bg"
+            android:background="@drawable/selector_theme_button"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

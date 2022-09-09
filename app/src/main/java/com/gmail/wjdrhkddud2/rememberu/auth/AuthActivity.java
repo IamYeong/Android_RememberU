@@ -186,6 +186,7 @@ public class AuthActivity extends AppCompatActivity {
 
         SharedPreferencesManager.setUserEmail(AuthActivity.this, user.getEmail());
         SharedPreferencesManager.setUserName(AuthActivity.this, user.getDisplayName());
+        SharedPreferencesManager.setUID(AuthActivity.this, user.getUid());
 
         Intent intent = new Intent(AuthActivity.this, MainActivity.class);
         startActivity(intent);

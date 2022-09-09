@@ -35,6 +35,13 @@
 
     <!-- Add person -->
     <string name="new_person">인물 추가</string>
+    <string name="person_name">이름(필수)</string>
+    <string name="person_gender">성별 선택(필수)</string>
+    <string name="person_phone">연락처</string>
+    <string name="person_year_old">출생년도</string>
+    <string name="person_birth">생일</string>
+    <string name="person_email">이메일</string>
+    <string name="person_description">한 줄 설명</string>
 
     <!-- setting -->
     <string name="setting">설정</string>

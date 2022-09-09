@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             nameText.setText( mAuth.getCurrentUser().getDisplayName());
             countText.setText(accountInfo);
 
-            List<Person> people2 = new ArrayList<>();
+            List<Person> people2 = new ArrayList<>(people);
             for (int i = 0; i < 10; i++) {
                 Person person = new Person("0123456" + i);
                 person.setName("김철수");

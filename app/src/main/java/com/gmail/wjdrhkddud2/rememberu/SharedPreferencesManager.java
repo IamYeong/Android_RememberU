@@ -11,6 +11,7 @@ public class SharedPreferencesManager {
     private static final String SHARED_PREFERENCES_NAME =
             "com.gmail.wjdrhkddud2.rememberu.sharedpreferences";
 
+    private static final String USER_UID = SHARED_PREFERENCES_NAME + "user.uid";
     private static final String USER_EMAIL = SHARED_PREFERENCES_NAME + "user.email";
     private static final String USER_DISPLAY_NAME = SHARED_PREFERENCES_NAME + "user.name";
     private static final String USER_EMAIL_PASSWORD = SHARED_PREFERENCES_NAME + "user.password";
@@ -40,6 +41,17 @@ public class SharedPreferencesManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USER_EMAIL_PASSWORD, value);
         return editor.commit();
+    }
+
+    public static boolean setUID(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_UID, value);
+        return editor.commit();
+    }
+
+    public static String getUID(Context context) {
+        return getPreferences(context).getString(USER_UID, null);
     }
 
     public static String getUserEmail(Context context) {

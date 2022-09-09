@@ -12,4 +12,14 @@
         android:drawable="@drawable/button_normal_default"
         />
 
+    <item
+        android:state_selected="true"
+        android:drawable="@drawable/button_pressed_default"
+        />
+
+    <item
+        android:state_selected="false"
+        android:drawable="@drawable/button_normal_default"
+        />
+
 </selector>

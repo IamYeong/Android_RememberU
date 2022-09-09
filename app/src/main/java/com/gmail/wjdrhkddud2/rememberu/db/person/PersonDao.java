@@ -23,6 +23,7 @@ public interface PersonDao {
     @Query("SELECT * FROM PERSON WHERE uid = :uid")
     List<Person> selectAll(String uid);
 
-
+    @Query("SELECT EXISTS(SELECT * FROM PERSON WHERE hashed == :hash)")
+    boolean isExist(String hash);
 
 }

@@ -54,8 +54,19 @@ public class Person {
     @ColumnInfo(name = "bookmark")
     private boolean bookmark;
 
+    @ColumnInfo(name = "description")
+    private String description;
+
     public Person(String hashed) {
         this.hashed = hashed;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getId() {

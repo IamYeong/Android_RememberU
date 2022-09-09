@@ -1,6 +1,7 @@
 package com.gmail.wjdrhkddud2.rememberu.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
+import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
+import com.gmail.wjdrhkddud2.rememberu.detail.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,7 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
 
         holder.getNameText().setText(person.getName());
         holder.getContentText().setText(person.getPhoneNumber());
+        holder.getBookmarkButton().setSelected(person.isBookmark());
 
         holder.getBookmarkButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +70,19 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
                 db.personDao().update(person);
 
                 holder.getBookmarkButton().setSelected(!isSelected);
+
+            }
+        });
+
+        holder.getCardLayout().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferencesManager.setPersonHash(context, person.getHashed());
+
+                Intent intent = new Intent(context, DetailActivity.class);
+                context.startActivity(intent);
+
 
             }
         });

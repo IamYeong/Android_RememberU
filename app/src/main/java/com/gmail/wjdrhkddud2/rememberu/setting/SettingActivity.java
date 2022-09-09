@@ -8,11 +8,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -97,6 +100,21 @@ public class SettingActivity extends AppCompatActivity {
 
 
     private void selectContacts(Handler handler, Runnable runnable) {
+
+        ContentResolver contentResolver = getContentResolver();
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+
+        if ((cursor != null) && (cursor.getCount() > 0)) {
+
+            cursor.moveToFirst();
+            while (true) {
+
+
+                if (!cursor.moveToNext()) break;
+            }
+
+        }
 
         Thread thread = new Thread() {
             @Override

@@ -26,4 +26,7 @@ public interface PersonDao {
     @Query("SELECT EXISTS(SELECT * FROM PERSON WHERE hashed == :hash)")
     boolean isExist(String hash);
 
+    @Query("SELECT * FROM PERSON WHERE (uid == :uid) AND (hashed == :hashed)")
+    Person select(String uid, String hashed);
+
 }

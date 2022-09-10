@@ -17,6 +17,7 @@ public class SharedPreferencesManager {
     private static final String USER_EMAIL_PASSWORD = SHARED_PREFERENCES_NAME + "user.password";
 
     private static final String PERSON_HASH = "com.gmail.wjdrhkddud2.rememberu.sharedpreferences.person.hash";
+    private static final String MEMO_HASH = "com.gmail.wjdrhkddud2.rememberu.sharedpreferences.memo.hash";
 
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -57,6 +58,17 @@ public class SharedPreferencesManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(PERSON_HASH, value);
         return editor.commit();
+    }
+
+    public static boolean setMemoHash(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(MEMO_HASH, value);
+        return editor.commit();
+    }
+
+    public static String getMemoHash(Context context) {
+        return getPreferences(context).getString(MEMO_HASH, null);
     }
 
     public static String getPersonHash(Context context) {

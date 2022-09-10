@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
+import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
 
 import java.util.ArrayList;
@@ -24,11 +25,16 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
     private Context context;
     private List<Memo> memos;
     private List<Memo> results;
+    private OnMemoSelectedListener mListener;
 
     public MemoVerticalAdapter(Context context) {
         this.context = context;
         memos = new ArrayList<>();
         results = new ArrayList<>();
+    }
+
+    public void setSelectListener(OnMemoSelectedListener listener) {
+        this.mListener = listener;
     }
 
     public void setMemo(List<Memo> memoList) {
@@ -70,7 +76,8 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
             @Override
             public void onClick(View v) {
 
-                Log.e(getClass().getSimpleName(), memo.getTitle() + "\n" + memo.getContent());
+                SharedPreferencesManager.setMemoHash(context, memo.getHashed());
+                mListener.onSelect(memo.getHashed());
 
             }
         });

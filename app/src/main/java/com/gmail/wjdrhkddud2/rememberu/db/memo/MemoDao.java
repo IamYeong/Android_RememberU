@@ -20,6 +20,9 @@ public interface MemoDao {
     @Update
     void update(Memo memo);
 
+    @Query("SELECT * FROM MEMO WHERE hashed == :hash")
+    Memo select(String hash);
+
     @Query("SELECT * FROM MEMO WHERE uid = :uid")
     List<Memo> selectAll(String uid);
 

@@ -1,6 +1,7 @@
 package com.gmail.wjdrhkddud2.rememberu.detail;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
@@ -27,8 +29,9 @@ public class DetailActivity extends AppCompatActivity {
 
     private ImageButton backButton, bookmarkButton, writeButton;
     private TextView personNameText;
-    private RecyclerView allRV;
+    private RecyclerView allRV,markRV;
     private MemoVerticalAdapter verticalAdapter;
+    private MemoHorizontalAdapter horizontalAdapter;
     private FragmentContainerView fragmentContainerView;
     private FragmentManager fragmentManager;
 
@@ -43,13 +46,34 @@ public class DetailActivity extends AppCompatActivity {
         bookmarkButton = findViewById(R.id.img_btn_bookmark_detail);
         personNameText = findViewById(R.id.tv_person_name_detail);
         allRV = findViewById(R.id.rv_memo_all_detail);
+        markRV = findViewById(R.id.rv_memo_bookmark_detail);
         writeButton = findViewById(R.id.img_btn_add_detail);
-        verticalAdapter = new MemoVerticalAdapter(DetailActivity.this);
 
+        verticalAdapter = new MemoVerticalAdapter(DetailActivity.this);
+        horizontalAdapter = new MemoHorizontalAdapter(DetailActivity.this);
+
+        verticalAdapter.setSelectListener(new OnMemoSelectedListener() {
+            @Override
+            public void onSelect(String hash) {
+                openFragment(new ModifyMemoFragment());
+            }
+        });
+
+        horizontalAdapter.setSelectListener(new OnMemoSelectedListener() {
+            @Override
+            public void onSelect(String hash) {
+                openFragment(new ModifyMemoFragment());
+            }
+        });
+
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(DetailActivity.this);
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(DetailActivity.this);
         verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        horizontalLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         allRV.setLayoutManager(verticalLayoutManager);
         allRV.setAdapter(verticalAdapter);
+        markRV.setLayoutManager(horizontalLayoutManager);
+        markRV.setAdapter(horizontalAdapter);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,13 +93,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
-                fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_container_detail, new WriteMemoFragment());
-                fragmentTransaction.commit();
-
+                openFragment(new WriteMemoFragment());
             }
         });
 
@@ -85,34 +103,6 @@ public class DetailActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
-
-                RememberUDatabase db = RememberUDatabase.getInstance(DetailActivity.this);
-                Person person = db.personDao().select(
-                        SharedPreferencesManager.getUID(DetailActivity.this),
-                        SharedPreferencesManager.getPersonHash(DetailActivity.this)
-                );
-
-                selectMemo(person.getHashed());
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        personNameText.setText(person.getName());
-                        bookmarkButton.setSelected(person.isBookmark());
-                        verticalAdapter.notifyDataSetChanged();
-                    }
-                });
-
-                Looper.loop();
-            }
-        };
-
-        thread.start();
 
     }
 
@@ -134,13 +124,53 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                RememberUDatabase db = RememberUDatabase.getInstance(DetailActivity.this);
+                Person person = db.personDao().select(
+                        SharedPreferencesManager.getUID(DetailActivity.this),
+                        SharedPreferencesManager.getPersonHash(DetailActivity.this)
+                );
+
+                selectMemo("", person.getHashed());
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        personNameText.setText(person.getName());
+                        bookmarkButton.setSelected(person.isBookmark());
+                        verticalAdapter.notifyDataSetChanged();
+                        horizontalAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
+
     }
 
-    private void selectMemo(String personHash) {
+    private void selectMemo(String uid, String personHash) {
 
         RememberUDatabase db = RememberUDatabase.getInstance(DetailActivity.this);
         List<Memo> memos = db.memoDao().selectByUserAndPerson(SharedPreferencesManager.getUID(DetailActivity.this), SharedPreferencesManager.getPersonHash(DetailActivity.this));
         verticalAdapter.setMemo(memos);
+        horizontalAdapter.setMemo(memos);
+
+    }
+
+    private void openFragment(Fragment fragment) {
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragment_container_detail, fragment);
+        fragmentTransaction.commit();
 
     }
 

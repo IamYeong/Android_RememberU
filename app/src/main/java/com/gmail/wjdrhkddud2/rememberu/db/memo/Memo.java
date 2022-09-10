@@ -59,6 +59,9 @@ public class Memo {
     @ColumnInfo(name = "create")
     private long create;
 
+    @ColumnInfo(name = "update")
+    private long update;
+
     @ColumnInfo(name = "bookmark")
     private boolean bookmark;
 
@@ -66,6 +69,14 @@ public class Memo {
         this.personHashed = personHashed;
         this.hashed = hashed;
         this.uid = uid;
+    }
+
+    public long getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(long update) {
+        this.update = update;
     }
 
     public void setId(int id) {

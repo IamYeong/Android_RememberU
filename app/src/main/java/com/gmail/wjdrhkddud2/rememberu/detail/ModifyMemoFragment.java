@@ -2,11 +2,6 @@ package com.gmail.wjdrhkddud2.rememberu.detail;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.gmail.wjdrhkddud2.rememberu.HashConverter;
 import com.gmail.wjdrhkddud2.rememberu.R;
@@ -25,8 +24,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
-public class WriteMemoFragment extends Fragment {
+public class ModifyMemoFragment extends Fragment {
 
     private Context context;
     private ImageButton closeButton, bookmarkButton;
@@ -36,7 +36,7 @@ public class WriteMemoFragment extends Fragment {
 
     private FirebaseAuth mAuth;
 
-    public WriteMemoFragment() {
+    public ModifyMemoFragment() {
         // Required empty public constructor
     }
 
@@ -70,7 +70,7 @@ public class WriteMemoFragment extends Fragment {
                 if (memo == null) return;
 
                 RememberUDatabase db = RememberUDatabase.getInstance(context);
-                db.memoDao().insert(memo);
+                db.memoDao().update(memo);
 
                 close(context);
 
@@ -96,6 +96,17 @@ public class WriteMemoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+
+        RememberUDatabase db = RememberUDatabase.getInstance(context);
+        Memo memo = db.memoDao().select(SharedPreferencesManager.getMemoHash(context));
+
+        titleField.setText(memo.getTitle());
+        contentField.setText(memo.getContent());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        dateText.setText(simpleDateFormat.format(memo.getCreate()));
+        bookmarkButton.setSelected(memo.isBookmark());
+
     }
 
     @Override
@@ -124,35 +135,22 @@ public class WriteMemoFragment extends Fragment {
         }
 
         long time = Calendar.getInstance().getTime().getTime();
-        try {
 
-            String uid = SharedPreferencesManager.getUID(context);
-            String personHash = SharedPreferencesManager.getPersonHash(context);
+        RememberUDatabase db = RememberUDatabase.getInstance(context);
+        Memo memo = db.memoDao().select(SharedPreferencesManager.getMemoHash(context));
 
-            Memo memo = new Memo(
-                    uid,
-                    personHash,
-                    //누가 누구의 메모를 언제 썼다는 유니크한 키
-                    HashConverter.hashingFromString(uid + personHash + time)
-            );
+        memo.setBookmark(bookmarkButton.isSelected());
+        memo.setTitle(title);
+        memo.setContent(content);
+        memo.setUpdate(time);
 
-            memo.setBookmark(bookmarkButton.isSelected());
-            memo.setTitle(title);
-            memo.setContent(content);
-            memo.setCreate(time);
-            memo.setUpdate(time);
-
-            return memo;
-
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
+        return memo;
 
     }
 
     private void close(Context context) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(WriteMemoFragment.this);
+        fragmentTransaction.remove(ModifyMemoFragment.this);
         fragmentTransaction.commit();
 
     }

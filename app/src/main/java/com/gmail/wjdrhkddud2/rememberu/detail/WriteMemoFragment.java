@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class WriteMemoFragment extends Fragment {
 
@@ -34,10 +36,14 @@ public class WriteMemoFragment extends Fragment {
     private TextView dateText;
     private Button saveButton;
 
-    private FirebaseAuth mAuth;
+    private OnFragmentDetachListener detachListener;
 
     public WriteMemoFragment() {
         // Required empty public constructor
+    }
+
+    public void setDetachListener(OnFragmentDetachListener listener) {
+        this.detachListener = listener;
     }
 
     @Override
@@ -96,6 +102,10 @@ public class WriteMemoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        dateText.setText(simpleDateFormat.format(Calendar.getInstance().getTime().getTime()));
+
     }
 
     @Override
@@ -154,6 +164,7 @@ public class WriteMemoFragment extends Fragment {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.remove(WriteMemoFragment.this);
         fragmentTransaction.commit();
+        detachListener.onDetach();
 
     }
 

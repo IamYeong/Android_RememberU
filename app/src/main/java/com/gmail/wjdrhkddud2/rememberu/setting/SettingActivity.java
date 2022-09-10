@@ -3,6 +3,7 @@ package com.gmail.wjdrhkddud2.rememberu.setting;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -22,9 +23,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
+import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.auth.AuthActivity;
 import com.gmail.wjdrhkddud2.rememberu.splash.SplashActivity;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +39,6 @@ public class SettingActivity extends AppCompatActivity {
     private ImageButton backButton;
     private TextView accountNameText, accountEmailText;
     private ConstraintLayout settingLayout, readContactLayout;
-
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -98,6 +101,24 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        accountNameText.setText(SharedPreferencesManager.getUserName(SettingActivity.this));
+        accountEmailText.setText(SharedPreferencesManager.getUserEmail(SettingActivity.this));
+
+    }
 
     private void selectContacts(Handler handler, Runnable runnable) {
 

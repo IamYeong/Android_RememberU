@@ -39,8 +39,6 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
         this.results.clear();
         this.people.addAll(people);
         this.results.addAll(people);
-
-        notifyDataSetChanged();
     }
 
     @NonNull

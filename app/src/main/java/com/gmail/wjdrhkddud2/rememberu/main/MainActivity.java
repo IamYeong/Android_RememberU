@@ -1,5 +1,6 @@
 package com.gmail.wjdrhkddud2.rememberu.main;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
+import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.add.NewPersonActivity;
 import com.gmail.wjdrhkddud2.rememberu.auth.AuthActivity;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
@@ -32,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView nameText, countText, filterText, sortText;
     private ImageButton settingButton, addButton;
-    private FirebaseAuth mAuth;
     private RecyclerView bookmarkRV, searchRV;
     private BookmarkPersonAdapter bookmarksAdapter;
     private ResultPersonAdapter resultsAdapter;
@@ -132,37 +133,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        mAuth = FirebaseAuth.getInstance();
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
 
-        if (mAuth.getCurrentUser() != null) {
+                RememberUDatabase db = RememberUDatabase.getInstance(MainActivity.this);
+                String uid = SharedPreferencesManager.getUID(MainActivity.this);
+                List<Person> people = db.personDao().selectAll(uid);
+                List<Memo> memo = db.memoDao().selectAll(uid);
 
-            RememberUDatabase db = RememberUDatabase.getInstance(MainActivity.this);
-            String uid = mAuth.getCurrentUser().getUid();
-            List<Person> people = db.personDao().selectAll(uid);
-            List<Memo> memo = db.memoDao().selectAll(uid);
+                String accountInfo = people.size() + " " + getString(R.string.friends) + "   " + memo.size() + " " + getString(R.string.memories);
 
+                bookmarksAdapter.setPeople(people);
+                resultsAdapter.setPeople(people);
 
-            String accountInfo = people.size() + " " + getString(R.string.friends) + "   " + memo.size() + " " + getString(R.string.memories);
-            nameText.setText( mAuth.getCurrentUser().getDisplayName());
-            countText.setText(accountInfo);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
 
+                        nameText.setText(SharedPreferencesManager.getUserName(MainActivity.this));
+                        countText.setText(accountInfo);
 
-            bookmarksAdapter.setPeople(people);
-            resultsAdapter.setPeople(people);
+                        bookmarksAdapter.notifyDataSetChanged();
+                        resultsAdapter.notifyDataSetChanged();
+                    }
+                });
 
-
-        } else {
-
-            /*
-            Toast.makeText(this, getString(R.string.not_auth), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-            startActivity(intent);
-            finish();
-
-             */
-
-        }
-
+                Looper.loop();
+            }
+        };
+        thread.start();
     }
 
 

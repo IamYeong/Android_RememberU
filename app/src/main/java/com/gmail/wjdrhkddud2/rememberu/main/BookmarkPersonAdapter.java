@@ -39,9 +39,6 @@ public class BookmarkPersonAdapter extends RecyclerView.Adapter<BookmarkPersonVi
         this.results.clear();
         this.people.addAll(people);
         this.results.addAll(people);
-
-        notifyDataSetChanged();
-        //notifyItemRangeChanged(0, people.size());
     }
 
     @NonNull

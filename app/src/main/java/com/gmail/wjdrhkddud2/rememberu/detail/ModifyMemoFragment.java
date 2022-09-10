@@ -2,6 +2,7 @@ package com.gmail.wjdrhkddud2.rememberu.detail;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +35,14 @@ public class ModifyMemoFragment extends Fragment {
     private TextView dateText;
     private Button saveButton;
 
-    private FirebaseAuth mAuth;
+    private OnFragmentDetachListener detachListener;
 
     public ModifyMemoFragment() {
         // Required empty public constructor
+    }
+
+    public void setDetachListener(OnFragmentDetachListener listener) {
+        this.detachListener = listener;
     }
 
     @Override
@@ -97,7 +102,6 @@ public class ModifyMemoFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-
         RememberUDatabase db = RememberUDatabase.getInstance(context);
         Memo memo = db.memoDao().select(SharedPreferencesManager.getMemoHash(context));
 
@@ -152,7 +156,7 @@ public class ModifyMemoFragment extends Fragment {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.remove(ModifyMemoFragment.this);
         fragmentTransaction.commit();
-
+        detachListener.onDetach();
     }
 
 }

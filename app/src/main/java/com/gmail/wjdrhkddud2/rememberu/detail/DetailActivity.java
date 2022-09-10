@@ -1,9 +1,12 @@
 package com.gmail.wjdrhkddud2.rememberu.detail;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentOnAttachListener;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +15,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -22,6 +26,7 @@ import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -55,14 +60,28 @@ public class DetailActivity extends AppCompatActivity {
         verticalAdapter.setSelectListener(new OnMemoSelectedListener() {
             @Override
             public void onSelect(String hash) {
-                openFragment(new ModifyMemoFragment());
+                ModifyMemoFragment modifyMemoFragment = new ModifyMemoFragment();
+                modifyMemoFragment.setDetachListener(new OnFragmentDetachListener() {
+                    @Override
+                    public void onDetach() {
+                        selectMemo();
+                    }
+                });
+                openFragment(modifyMemoFragment);
             }
         });
 
         horizontalAdapter.setSelectListener(new OnMemoSelectedListener() {
             @Override
             public void onSelect(String hash) {
-                openFragment(new ModifyMemoFragment());
+                ModifyMemoFragment modifyMemoFragment = new ModifyMemoFragment();
+                modifyMemoFragment.setDetachListener(new OnFragmentDetachListener() {
+                    @Override
+                    public void onDetach() {
+                        selectMemo();
+                    }
+                });
+                openFragment(modifyMemoFragment);
             }
         });
 
@@ -93,7 +112,14 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                openFragment(new WriteMemoFragment());
+                WriteMemoFragment writeMemoFragment = new WriteMemoFragment();
+                writeMemoFragment.setDetachListener(new OnFragmentDetachListener() {
+                    @Override
+                    public void onDetach() {
+                        selectMemo();
+                    }
+                });
+                openFragment(writeMemoFragment);
             }
         });
 
@@ -125,6 +151,11 @@ public class DetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        selectMemo();
+
+    }
+
+    private void selectMemo() {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -132,12 +163,16 @@ public class DetailActivity extends AppCompatActivity {
                 Looper.prepare();
 
                 RememberUDatabase db = RememberUDatabase.getInstance(DetailActivity.this);
+                String uid = SharedPreferencesManager.getUID(DetailActivity.this);
+                String personHash = SharedPreferencesManager.getPersonHash(DetailActivity.this);
                 Person person = db.personDao().select(
-                        SharedPreferencesManager.getUID(DetailActivity.this),
-                        SharedPreferencesManager.getPersonHash(DetailActivity.this)
+                        uid,
+                        personHash
                 );
 
-                selectMemo("", person.getHashed());
+                List<Memo> memos = db.memoDao().selectByUserAndPerson(uid, personHash);
+                verticalAdapter.setMemo(memos);
+                horizontalAdapter.setMemo(memos);
 
                 handler.post(new Runnable() {
                     @Override
@@ -154,15 +189,6 @@ public class DetailActivity extends AppCompatActivity {
         };
 
         thread.start();
-
-    }
-
-    private void selectMemo(String uid, String personHash) {
-
-        RememberUDatabase db = RememberUDatabase.getInstance(DetailActivity.this);
-        List<Memo> memos = db.memoDao().selectByUserAndPerson(SharedPreferencesManager.getUID(DetailActivity.this), SharedPreferencesManager.getPersonHash(DetailActivity.this));
-        verticalAdapter.setMemo(memos);
-        horizontalAdapter.setMemo(memos);
 
     }
 

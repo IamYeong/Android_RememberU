@@ -55,22 +55,6 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
 
         holder.getNameText().setText(person.getName());
         holder.getContentText().setText(person.getPhoneNumber());
-        holder.getBookmarkButton().setSelected(person.isBookmark());
-
-        holder.getBookmarkButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                boolean isSelected = person.isBookmark();
-
-                person.setBookmark(!isSelected);
-                RememberUDatabase db = RememberUDatabase.getInstance(context);
-                db.personDao().update(person);
-
-                holder.getBookmarkButton().setSelected(!isSelected);
-
-            }
-        });
 
         holder.getCardLayout().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,14 +80,12 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
 class ResultPersonViewHolder extends RecyclerView.ViewHolder {
 
     private ConstraintLayout cardLayout;
-    private ImageButton bookmarkButton;
     private TextView nameText, contentText;
 
     public ResultPersonViewHolder(@NonNull View itemView) {
         super(itemView);
 
         cardLayout = itemView.findViewById(R.id.constraint_card_result_main);
-        bookmarkButton = itemView.findViewById(R.id.img_btn_result_bookmark_main);
         nameText = itemView.findViewById(R.id.tv_result_name_main);
         contentText = itemView.findViewById(R.id.tv_result_content_main);
 
@@ -117,13 +99,6 @@ class ResultPersonViewHolder extends RecyclerView.ViewHolder {
         this.cardLayout = cardLayout;
     }
 
-    public ImageButton getBookmarkButton() {
-        return bookmarkButton;
-    }
-
-    public void setBookmarkButton(ImageButton bookmarkButton) {
-        this.bookmarkButton = bookmarkButton;
-    }
 
     public TextView getNameText() {
         return nameText;

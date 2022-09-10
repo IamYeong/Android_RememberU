@@ -104,7 +104,10 @@ public class DetailActivity extends AppCompatActivity {
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bookmarkButton.setSelected(bookmarkButton.isSelected());
+
+                bookmarkButton.setClickable(false);
+                updateBookmark(!bookmarkButton.isSelected());
+
             }
         });
 
@@ -152,6 +155,37 @@ public class DetailActivity extends AppCompatActivity {
         super.onResume();
 
         selectMemo();
+
+    }
+
+    private void updateBookmark(boolean bookmark) {
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                RememberUDatabase db = RememberUDatabase.getInstance(DetailActivity.this);
+                Person person = db.personDao().select(
+                        SharedPreferencesManager.getUID(DetailActivity.this),
+                        SharedPreferencesManager.getPersonHash(DetailActivity.this)
+                );
+                person.setBookmark(bookmark);
+                db.personDao().update(person);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        bookmarkButton.setSelected(bookmark);
+                        bookmarkButton.setClickable(true);
+                    }
+                });
+
+                Looper.loop();
+            }
+        };
+        thread.start();
 
     }
 

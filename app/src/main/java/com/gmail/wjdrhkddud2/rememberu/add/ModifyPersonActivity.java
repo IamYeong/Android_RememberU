@@ -2,9 +2,7 @@ package com.gmail.wjdrhkddud2.rememberu.add;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,19 +14,19 @@ import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
+import com.gmail.wjdrhkddud2.rememberu.detail.ModifyMemoFragment;
 
-import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class NewPersonActivity extends AppCompatActivity {
+public class ModifyPersonActivity extends AppCompatActivity {
 
     private ImageButton backButton, bookmarkButton;
     private Button openBirthdayPickerButton, saveButton, maleButton, femaleButton;
     private EditText nameField, phoneField, descriptionField,
-    birthYearField, birthMonthField, birthDayField;
+            birthYearField, birthMonthField, birthDayField;
     private TextView nameMessageText;
 
 
@@ -86,34 +84,41 @@ public class NewPersonActivity extends AppCompatActivity {
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Person person = isExactly();
-                if (person == null) return;
-
-                RememberUDatabase db = RememberUDatabase.getInstance(NewPersonActivity.this);
-                db.personDao().insert(person);
-
-                finish();
-
-            }
-        });
-
         openBirthdayPickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
-    }
 
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Person person = isExactly();
+
+                if (person == null) return;
+
+                RememberUDatabase db = RememberUDatabase.getInstance(ModifyPersonActivity.this);
+                db.personDao().update(person);
+
+                finish();
+
+            }
+        });
+
+
+    }
 
     private Person isExactly() {
 
+        RememberUDatabase db = RememberUDatabase.getInstance(ModifyPersonActivity.this);
+        Person person = db.personDao().select(
+                SharedPreferencesManager.getUID(ModifyPersonActivity.this),
+                SharedPreferencesManager.getPersonHash(ModifyPersonActivity.this)
+        );
+
         String name = nameField.getText().toString();
-        String hash = "";
         String phone = phoneField.getText().toString();
         String description = descriptionField.getText().toString();
         String birth = birthYearField.getText().toString()
@@ -127,41 +132,13 @@ public class NewPersonActivity extends AppCompatActivity {
 
             Date date = simpleDateFormat.parse(birth);
             birthDate = date.getTime();
-            hash = HashConverter.hashingFromString(name);
 
         } catch (ParseException e) {
 
             return null;
 
-        } catch (NoSuchAlgorithmException e) {
-
-            return null;
         }
 
-        //이름 입력 돼있어야 함.
-        if (name.length() == 0) {
-
-            return null;
-        }
-
-        //성별도 필수임
-        if (!maleButton.isSelected() && !femaleButton.isSelected()) {
-
-            return null;
-        }
-
-        RememberUDatabase db = RememberUDatabase.getInstance(NewPersonActivity.this);
-        boolean isExist = db.personDao().isExist(hash);
-
-        if (isExist) {
-
-            nameMessageText.setText("Already exist name");
-
-            return null;
-        }
-
-        Person person = new Person(hash);
-        person.setUid(SharedPreferencesManager.getUID(NewPersonActivity.this));
         person.setPhoneNumber(phone);
         person.setBookmark(bookmarkButton.isSelected());
         person.setName(name);
@@ -170,5 +147,7 @@ public class NewPersonActivity extends AppCompatActivity {
         person.setDescription(description);
 
         return person;
+
     }
+
 }

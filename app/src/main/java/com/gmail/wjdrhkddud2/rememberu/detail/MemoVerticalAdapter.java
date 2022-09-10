@@ -65,12 +65,6 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
 
         holder.getTitleText().setText(memo.getTitle());
         holder.getContentText().setText(memo.getContent().substring(0, (Math.min(memo.getContent().length(), 20))));
-        holder.getBookmarkButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.getBookmarkButton().setSelected(!holder.getBookmarkButton().isSelected());
-            }
-        });
 
         holder.getLayout().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +87,6 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
 class MemoVerticalViewHolder extends RecyclerView.ViewHolder {
 
     private TextView titleText, contentText;
-    private ImageButton bookmarkButton;
     private ConstraintLayout layout;
 
     public MemoVerticalViewHolder(@NonNull View itemView) {
@@ -101,7 +94,6 @@ class MemoVerticalViewHolder extends RecyclerView.ViewHolder {
 
         titleText = itemView.findViewById(R.id.tv_memo_title);
         contentText = itemView.findViewById(R.id.tv_memo_content);
-        bookmarkButton = itemView.findViewById(R.id.img_btn_bookmark_memo);
         layout = itemView.findViewById(R.id.constraint_vertical_memo);
 
     }
@@ -120,14 +112,6 @@ class MemoVerticalViewHolder extends RecyclerView.ViewHolder {
 
     public void setContentText(TextView contentText) {
         this.contentText = contentText;
-    }
-
-    public ImageButton getBookmarkButton() {
-        return bookmarkButton;
-    }
-
-    public void setBookmarkButton(ImageButton bookmarkButton) {
-        this.bookmarkButton = bookmarkButton;
     }
 
     public ConstraintLayout getLayout() {

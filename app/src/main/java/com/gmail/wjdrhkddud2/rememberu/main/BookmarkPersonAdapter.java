@@ -37,8 +37,14 @@ public class BookmarkPersonAdapter extends RecyclerView.Adapter<BookmarkPersonVi
     public void setPeople(List<Person> people) {
         this.people.clear();
         this.results.clear();
-        this.people.addAll(people);
-        this.results.addAll(people);
+
+        for (Person person : people) {
+            if (person.isBookmark()) {
+                this.people.add(person);
+                this.results.add(person);
+            }
+        }
+
     }
 
     @NonNull
@@ -55,23 +61,6 @@ public class BookmarkPersonAdapter extends RecyclerView.Adapter<BookmarkPersonVi
 
         holder.getNameText().setText(person.getName());
         holder.getContentText().setText(person.getPhoneNumber());
-        holder.getBookmarkButton().setSelected(person.isBookmark());
-
-
-        holder.getBookmarkButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                boolean isSelected = person.isBookmark();
-
-                person.setBookmark(!isSelected);
-                RememberUDatabase db = RememberUDatabase.getInstance(context);
-                db.personDao().update(person);
-
-                holder.getBookmarkButton().setSelected(!isSelected);
-
-            }
-        });
 
         holder.getCardLayout().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +86,6 @@ class BookmarkPersonViewHolder extends RecyclerView.ViewHolder {
 
     private ConstraintLayout cardLayout;
     private TextView nameText, contentText;
-    private ImageButton bookmarkButton;
 
     public BookmarkPersonViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -105,7 +93,6 @@ class BookmarkPersonViewHolder extends RecyclerView.ViewHolder {
         cardLayout = itemView.findViewById(R.id.constraint_card_bookmark_main);
         nameText = itemView.findViewById(R.id.tv_bookmark_name_main);
         contentText = itemView.findViewById(R.id.tv_bookmark_content_main);
-        bookmarkButton = itemView.findViewById(R.id.img_btn_bookmark_main_bookmark_list);
 
     }
 
@@ -133,11 +120,4 @@ class BookmarkPersonViewHolder extends RecyclerView.ViewHolder {
         this.contentText = contentText;
     }
 
-    public ImageButton getBookmarkButton() {
-        return bookmarkButton;
-    }
-
-    public void setBookmarkButton(ImageButton bookmarkButton) {
-        this.bookmarkButton = bookmarkButton;
-    }
 }

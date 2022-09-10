@@ -25,21 +25,6 @@
         android:text="test"
         />
 
-    <ImageButton
-        android:id="@+id/img_btn_bookmark_main_bookmark_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        android:src="@drawable/selector_bookmark"
-        android:background="@null"
-
-        android:padding="10dp"
-
-        />
-
     <TextView
         android:id="@+id/tv_bookmark_content_main"
         android:layout_width="wrap_content"

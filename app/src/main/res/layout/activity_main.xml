@@ -52,6 +52,10 @@
             app:layout_constraintStart_toStartOf="@id/tv_count_main"
 
             android:layout_marginTop="20dp"
+
+            android:drawableEnd="@drawable/bookmark_fill"
+            android:gravity="center_vertical"
+            android:drawablePadding="10dp"
             />
 
         <androidx.recyclerview.widget.RecyclerView

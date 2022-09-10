@@ -32,7 +32,7 @@ public class Person {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    //uid + name + phone + yyyy.mm.dd hh:mm:ss
+    //uid + name + phone // 특정 유저의 특정 인물이 같은 이름과 같은 번호를 가지고 있다면 같은 사람으로 간주, 정보수정시 해시도 변경.
     @ColumnInfo(name = "hashed")
     private String hashed;
 

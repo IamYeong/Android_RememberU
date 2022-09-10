@@ -127,7 +127,11 @@ public class NewPersonActivity extends AppCompatActivity {
 
             Date date = simpleDateFormat.parse(birth);
             birthDate = date.getTime();
-            hash = HashConverter.hashingFromString(name);
+            hash = HashConverter.hashingFromString(
+                    SharedPreferencesManager.getUID(NewPersonActivity.this)
+                    + name
+                    + phone
+            );
 
         } catch (ParseException e) {
 

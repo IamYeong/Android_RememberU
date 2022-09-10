@@ -16,6 +16,7 @@ import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
 import com.gmail.wjdrhkddud2.rememberu.detail.ModifyMemoFragment;
 
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -102,6 +103,8 @@ public class ModifyPersonActivity extends AppCompatActivity {
                 RememberUDatabase db = RememberUDatabase.getInstance(ModifyPersonActivity.this);
                 db.personDao().update(person);
 
+                SharedPreferencesManager.setPersonHash(ModifyPersonActivity.this, person.getHashed());
+
                 finish();
 
             }
@@ -119,6 +122,7 @@ public class ModifyPersonActivity extends AppCompatActivity {
         );
 
         String name = nameField.getText().toString();
+        String hash = "";
         String phone = phoneField.getText().toString();
         String description = descriptionField.getText().toString();
         String birth = birthYearField.getText().toString()
@@ -132,13 +136,22 @@ public class ModifyPersonActivity extends AppCompatActivity {
 
             Date date = simpleDateFormat.parse(birth);
             birthDate = date.getTime();
+            hash = HashConverter.hashingFromString(
+                    SharedPreferencesManager.getUID(ModifyPersonActivity.this)
+                            + name
+                            + phone
+            );
 
         } catch (ParseException e) {
 
             return null;
 
+        } catch (NoSuchAlgorithmException e) {
+
+            return null;
         }
 
+        person.setHashed(hash);
         person.setPhoneNumber(phone);
         person.setBookmark(bookmarkButton.isSelected());
         person.setName(name);

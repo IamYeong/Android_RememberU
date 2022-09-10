@@ -109,45 +109,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mAuth = FirebaseAuth.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
-
-            RememberUDatabase db = RememberUDatabase.getInstance(MainActivity.this);
-            String uid = mAuth.getCurrentUser().getUid();
-            List<Person> people = db.personDao().selectAll(uid);
-            List<Memo> memo = db.memoDao().selectAll(uid);
-
-
-            String accountInfo = people.size() + " " + getString(R.string.friends) + "   " + memo.size() + " " + getString(R.string.memories);
-            nameText.setText( mAuth.getCurrentUser().getDisplayName());
-            countText.setText(accountInfo);
-
-            List<Person> people2 = new ArrayList<>(people);
-            for (int i = 0; i < 10; i++) {
-                Person person = new Person("0123456" + i);
-                person.setName("김철수");
-                person.setBookmark(true);
-                person.setUid(mAuth.getCurrentUser().getUid());
-                person.setPhoneNumber("010-0000-0000");
-
-                people2.add(person);
-            }
-            bookmarksAdapter.setPeople(people2);
-            resultsAdapter.setPeople(people2);
-
-
-        } else {
-
-            /*
-            Toast.makeText(this, getString(R.string.not_auth), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-            startActivity(intent);
-            finish();
-
-             */
-
-        }
 
     }
 
@@ -170,6 +132,36 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null) {
+
+            RememberUDatabase db = RememberUDatabase.getInstance(MainActivity.this);
+            String uid = mAuth.getCurrentUser().getUid();
+            List<Person> people = db.personDao().selectAll(uid);
+            List<Memo> memo = db.memoDao().selectAll(uid);
+
+
+            String accountInfo = people.size() + " " + getString(R.string.friends) + "   " + memo.size() + " " + getString(R.string.memories);
+            nameText.setText( mAuth.getCurrentUser().getDisplayName());
+            countText.setText(accountInfo);
+
+
+            bookmarksAdapter.setPeople(people);
+            resultsAdapter.setPeople(people);
+
+
+        } else {
+
+            /*
+            Toast.makeText(this, getString(R.string.not_auth), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+            startActivity(intent);
+            finish();
+
+             */
+
+        }
 
     }
 

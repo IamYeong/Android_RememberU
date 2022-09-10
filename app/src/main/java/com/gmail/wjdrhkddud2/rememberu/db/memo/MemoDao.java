@@ -26,4 +26,7 @@ public interface MemoDao {
     @Query("SELECT * FROM MEMO WHERE person_hashed == :personHashed")
     List<Memo> selectByPerson(String personHashed);
 
+    @Query("SELECT * FROM MEMO WHERE (uid == :uid) AND (person_hashed == :personHashed)")
+    List<Memo> selectByUserAndPerson(String uid, String personHashed);
+
 }

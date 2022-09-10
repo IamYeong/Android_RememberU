@@ -15,15 +15,26 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.gmail.wjdrhkddud2.rememberu.HashConverter;
 import com.gmail.wjdrhkddud2.rememberu.R;
+import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
+import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
+import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class WriteMemoFragment extends Fragment {
 
     private Context context;
-    private ImageButton closeButton;
+    private ImageButton closeButton, bookmarkButton;
     private EditText titleField, contentField;
     private TextView dateText;
     private Button saveButton;
+
+    private FirebaseAuth mAuth;
 
     public WriteMemoFragment() {
         // Required empty public constructor
@@ -40,16 +51,36 @@ public class WriteMemoFragment extends Fragment {
         dateText = view.findViewById(R.id.tv_date_write_memo);
         titleField = view.findViewById(R.id.et_memo_title_write);
         contentField = view.findViewById(R.id.et_content_write_memo);
+        bookmarkButton = view.findViewById(R.id.img_btn_bookmark_memo_write);
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.remove(WriteMemoFragment.this);
-                fragmentTransaction.commit();
+                close(context);
 
+            }
+        });
 
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Memo memo = isExactly();
+                if (memo == null) return;
+
+                RememberUDatabase db = RememberUDatabase.getInstance(context);
+                db.memoDao().insert(memo);
+
+                close(context);
+
+            }
+        });
+
+        bookmarkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bookmarkButton.setSelected(!bookmarkButton.isSelected());
             }
         });
 
@@ -76,4 +107,49 @@ public class WriteMemoFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
+    private Memo isExactly() {
+
+        String title = titleField.getText().toString();
+        String content = contentField.getText().toString();
+
+        if (title.length() == 0) {
+
+            return null;
+        }
+
+        if (content.length() == 0) {
+
+            return null;
+        }
+
+        long time = Calendar.getInstance().getTime().getTime();
+        try {
+
+            Memo memo = new Memo(
+                    SharedPreferencesManager.getUID(context),
+                    SharedPreferencesManager.getPersonHash(context),
+                    HashConverter.hashingFromString(title + time)
+            );
+
+            memo.setBookmark(bookmarkButton.isSelected());
+            memo.setTitle(title);
+            memo.setContent(content);
+            memo.setCreate(time);
+
+            return memo;
+
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+
+    }
+
+    private void close(Context context) {
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(WriteMemoFragment.this);
+        fragmentTransaction.commit();
+
+    }
+
 }

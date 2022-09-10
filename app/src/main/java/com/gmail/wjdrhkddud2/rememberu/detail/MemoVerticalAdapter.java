@@ -2,6 +2,7 @@ package com.gmail.wjdrhkddud2.rememberu.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,20 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
         results = new ArrayList<>();
     }
 
+    public void setMemo(List<Memo> memoList) {
+        this.memos.clear();
+        this.results.clear();
+
+        this.memos.addAll(memoList);
+        this.results.addAll(memoList);
+    }
+
+    public void searchByWord(String key) {
+
+
+
+    }
+
     @NonNull
     @Override
     public MemoVerticalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,7 +58,7 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
         Memo memo = results.get(holder.getAdapterPosition());
 
         holder.getTitleText().setText(memo.getTitle());
-        holder.getContentText().setText(memo.getContent().substring(0, 20));
+        holder.getContentText().setText(memo.getContent().substring(0, (Math.min(memo.getContent().length(), 20))));
         holder.getBookmarkButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +70,7 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
             @Override
             public void onClick(View v) {
 
-
+                Log.e(getClass().getSimpleName(), memo.getTitle() + "\n" + memo.getContent());
 
             }
         });

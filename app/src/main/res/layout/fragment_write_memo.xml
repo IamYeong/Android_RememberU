@@ -6,66 +6,102 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".detail.WriteMemoFragment"
-    android:paddingHorizontal="20dp"
+    android:background="@color/background"
     >
 
-    <TextView
-        android:id="@+id/tv_date_write_memo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-
-        android:layout_marginTop="20dp"
-        android:text="2022.08.19 00:00"
-        />
-
-    <EditText
-        android:id="@+id/et_memo_title_write"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_bar_memo"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/item_field_primary_outline"
-        android:textCursorDrawable="@drawable/field_cursor_primary"
-        app:layout_constraintTop_toBottomOf="@id/tv_date_write_memo"
-        android:padding="10dp"
-        android:textSize="15sp"
-        android:hint="제목"
-        android:maxLines="1"
-        android:imeOptions="actionNext"
-        />
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingHorizontal="20dp"
 
-    <EditText
-        android:id="@+id/et_content_write_memo"
+        >
+
+        <ImageButton
+            android:id="@+id/img_btn_close_write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_close_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            android:background="?attr/selectableItemBackground"
+            />
+
+        <TextView
+            android:id="@+id/tv_date_write_memo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_btn_close_write"
+            android:layout_marginStart="10dp"
+            android:text="2022.08.19 00:00"
+            />
+
+        <ImageButton
+            android:id="@+id/img_btn_bookmark_memo_write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_circle"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/et_memo_title_write"
-        app:layout_constraintBottom_toTopOf="@id/btn_save_memo"
-        android:background="@drawable/item_field_primary_outline"
-        android:textCursorDrawable="@drawable/field_cursor_primary"
-        android:layout_marginVertical="10dp"
-        android:textSize="15sp"
-        android:padding="10dp"
-        android:imeOptions="actionDone"
-        />
-
-    <android.widget.Button
-        android:id="@+id/btn_save_memo"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-
+        app:layout_constraintTop_toBottomOf="@id/constraint_bar_memo"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/selector_theme_button"
-        />
+        android:paddingHorizontal="20dp"
+        >
 
-    <ImageButton
-        android:id="@+id/img_btn_close_write"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_close_24"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        <EditText
+            android:id="@+id/et_memo_title_write"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/item_field_primary_outline"
+            android:textCursorDrawable="@drawable/field_cursor_primary"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:hint="제목"
+            android:maxLines="1"
+            android:imeOptions="actionNext"
+            />
 
-        android:background="?attr/selectableItemBackground"
-        />
+        <EditText
+            android:id="@+id/et_content_write_memo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/et_memo_title_write"
+            app:layout_constraintBottom_toTopOf="@id/btn_save_memo"
+            android:background="@drawable/item_field_primary_outline"
+            android:textCursorDrawable="@drawable/field_cursor_primary"
+            android:layout_marginVertical="10dp"
+            android:textSize="15sp"
+            android:padding="10dp"
+            android:imeOptions="actionDone"
+            />
+
+        <android.widget.Button
+            android:id="@+id/btn_save_memo"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/selector_theme_button"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

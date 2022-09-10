@@ -62,9 +62,10 @@ public class Memo {
     @ColumnInfo(name = "bookmark")
     private boolean bookmark;
 
-    public Memo(String hashed, String personHashed) {
+    public Memo(String uid, String personHashed, String hashed) {
         this.personHashed = personHashed;
         this.hashed = hashed;
+        this.uid = uid;
     }
 
     public void setId(int id) {

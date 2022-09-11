@@ -155,6 +155,16 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
         Person person = results.get(holder.getAdapterPosition());
 
         holder.getNameText().setText(person.getName());
+
+        if (person.getDescription() == null) person.setDescription("");
+        if (person.getPhoneNumber() == null) person.setPhoneNumber("");
+
+        if (person.getDescription() == null) person.setDescription("");
+        if (person.getPhoneNumber() == null) person.setPhoneNumber("");
+
+        if (person.getDescription().length() == 0) person.setDescription(context.getString(R.string.empty_description));
+        if (person.getPhoneNumber().length() == 0) person.setPhoneNumber(context.getString(R.string.empty_phone_number));
+
         holder.getContentText().setText(person.getPhoneNumber());
 
         holder.getCardLayout().setOnClickListener(new View.OnClickListener() {

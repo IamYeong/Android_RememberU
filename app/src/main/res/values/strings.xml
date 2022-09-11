@@ -39,6 +39,9 @@
     <string name="name">이름</string>
     <string name="others">기타</string>
 
+    <string name="empty_phone_number">전화번호 없음</string>
+    <string name="empty_description">설명없음</string>
+
     <!-- Add person -->
     <string name="new_person">인물 추가</string>
     <string name="person_name">이름(필수)</string>

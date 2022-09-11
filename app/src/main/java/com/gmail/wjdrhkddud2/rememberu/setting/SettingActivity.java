@@ -31,6 +31,8 @@ import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.auth.AuthActivity;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
+import com.gmail.wjdrhkddud2.rememberu.dialog.LoadingDialog;
+import com.gmail.wjdrhkddud2.rememberu.dialog.NotifyDialog;
 import com.gmail.wjdrhkddud2.rememberu.splash.SplashActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +51,7 @@ public class SettingActivity extends AppCompatActivity {
     private ConstraintLayout settingLayout, readContactLayout, uploadLayout, downloadLayout;
 
     private Handler handler = new Handler(Looper.getMainLooper());
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,69 +133,117 @@ public class SettingActivity extends AppCompatActivity {
 
         Log.e(getClass().getSimpleName(), "SELECT CONTACTS");
 
-        RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
 
-        Uri uri = ContactsContract.Contacts.CONTENT_URI;
-        String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
-        Cursor cursor = getContentResolver().query(
-                uri, null, null, null, sort
-        );
+                RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
 
-        if (cursor.getCount() > 0) {
-
-            while (cursor.moveToNext()) {
-
-                String id = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-                String name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
-
-                Uri phoneURI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
-
-                Cursor phoneCursor = getContentResolver().query(
-                        phoneURI, null, selection, new String[]{id}, null
+                Uri uri = ContactsContract.Contacts.CONTENT_URI;
+                String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
+                Cursor cursor = getContentResolver().query(
+                        uri, null, null, null, sort
                 );
 
-                if (phoneCursor.moveToNext()) {
-                    String number = phoneCursor.getString(phoneCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                if (cursor.getCount() > 0) {
 
-                    Log.e(getClass().getSimpleName(), "\n name : " + name + "\n number : " + number);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingDialog = new LoadingDialog(SettingActivity.this);
+                            loadingDialog.setTitle(getString(R.string.read_contacts));
+                            loadingDialog.show();
+                        }
+                    });
 
 
-                    try {
+                    while (cursor.moveToNext()) {
 
-                        String hash = HashConverter.hashingFromString(
-                                SharedPreferencesManager.getUID(SettingActivity.this)
-                                + name
-                                + number
+                        String id = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                        String name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+
+                        Uri phoneURI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                        String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
+
+                        Cursor phoneCursor = getContentResolver().query(
+                                phoneURI, null, selection, new String[]{id}, null
                         );
 
-                        if (db.personDao().isExist(hash)) return;
-                        Person person = new Person(hash);
-                        person.setUid(SharedPreferencesManager.getUID(SettingActivity.this));
-                        person.setName(name);
-                        person.setPhoneNumber(number);
-                        person.setBookmark(false);
-                        person.setGender('u');
-                        person.setBirth(0);
-                        person.setDescription("");
+                        if (phoneCursor.moveToNext()) {
+                            String number = phoneCursor.getString(phoneCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                        db.personDao().insert(person);
+                            Log.e(getClass().getSimpleName(), "\n name : " + name + "\n number : " + number);
 
 
-                    } catch (NoSuchAlgorithmException e) {
+                            try {
+
+                                String hash = HashConverter.hashingFromString(
+                                        SharedPreferencesManager.getUID(SettingActivity.this)
+                                                + name
+                                                + number
+                                );
+
+                                if (db.personDao().isExist(hash)) return;
+                                Person person = new Person(hash);
+                                person.setUid(SharedPreferencesManager.getUID(SettingActivity.this));
+                                person.setName(name);
+                                person.setPhoneNumber(number);
+                                person.setBookmark(false);
+                                person.setGender('u');
+                                person.setBirth(0);
+                                person.setDescription("");
+
+                                db.personDao().insert(person);
+
+
+                            } catch (NoSuchAlgorithmException e) {
+
+                            }
+
+                        }
+
+                        phoneCursor.close();
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                float percent = (float) cursor.getPosition() / (float) cursor.getCount();
+                                loadingDialog.updateProgress(percent);
+                            }
+                        });
 
                     }
 
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingDialog.dismiss();
+                            loadingDialog.close();
+                        }
+                    });
+
+
                 }
 
-                phoneCursor.close();
+                cursor.close();
 
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        NotifyDialog dialog = new NotifyDialog(SettingActivity.this);
+                        dialog.setTitle(getString(R.string.read_contacts));
+                        dialog.show();
+                    }
+                });
+
+
+                Looper.loop();
             }
+        };
+        thread.start();
 
-        }
-
-
-        cursor.close();
     }
 
     @Override
@@ -244,7 +295,6 @@ public class SettingActivity extends AppCompatActivity {
         thread.start();
 
     }
-
 
     private void download() {
 

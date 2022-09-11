@@ -60,7 +60,20 @@ public class BookmarkPersonAdapter extends RecyclerView.Adapter<BookmarkPersonVi
         Person person = results.get(holder.getAdapterPosition());
 
         holder.getNameText().setText(person.getName());
-        holder.getContentText().setText(person.getPhoneNumber());
+
+        if (person.getDescription() == null) person.setDescription("");
+        if (person.getPhoneNumber() == null) person.setPhoneNumber("");
+
+        if (person.getDescription().length() == 0) person.setDescription(context.getString(R.string.empty_description));
+        if (person.getPhoneNumber().length() == 0) person.setPhoneNumber(context.getString(R.string.empty_phone_number));
+
+        String content =
+                person.getDescription().substring(0, Math.min(person.getDescription().length(), 20))
+                + "\n\n"
+                + person.getPhoneNumber();
+
+
+        holder.getContentText().setText(content);
 
         holder.getCardLayout().setOnClickListener(new View.OnClickListener() {
             @Override

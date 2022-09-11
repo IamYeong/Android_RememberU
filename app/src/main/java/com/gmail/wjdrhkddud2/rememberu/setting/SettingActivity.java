@@ -49,19 +49,6 @@ public class SettingActivity extends AppCompatActivity {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    private ActivityResultLauncher<String> permissionLauncher =
-            registerForActivityResult(
-                    new ActivityResultContracts.RequestPermission(),
-                    new ActivityResultCallback<Boolean>() {
-                        @Override
-                        public void onActivityResult(Boolean result) {
-                            Log.e(getClass().getSimpleName(), result + "");
-
-                            if (!result) shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
-                        }
-                    }
-            );
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

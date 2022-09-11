@@ -41,6 +41,28 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
         this.results.addAll(people);
     }
 
+    public void searchByWord(String key) {
+
+        results.clear();
+
+        if (key.length() == 0) {
+            results.addAll(people);
+        } else {
+
+            for (Person person : people) {
+
+                if (person.getName().contains(key)) {
+                    results.add(person);
+                }
+
+            }
+
+        }
+
+        notifyDataSetChanged();
+
+    }
+
     @NonNull
     @Override
     public ResultPersonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
+import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,23 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
 
     public void searchByWord(String key) {
 
+        results.clear();
+
+        if (key.length() == 0) {
+            results.addAll(memos);
+        } else {
+
+            for (Memo memo : memos) {
+
+                if (memo.getTitle().contains(key)) {
+                    results.add(memo);
+                }
+
+            }
+
+        }
+
+        notifyDataSetChanged();
 
 
     }

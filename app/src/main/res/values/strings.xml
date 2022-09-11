@@ -48,16 +48,29 @@
     <string name="person_birth">생일</string>
     <string name="person_email">이메일</string>
     <string name="person_description">한 줄 설명</string>
+    <string name="male">남성</string>
+    <string name="female">여성</string>
 
     <!-- Detail -->
     <string name="sort_date_desc">최신 작성순</string>
     <string name="sort_date_asc">오래된 작성순</string>
+    <string name="sort_title_asc">제목 오름차순</string>
+    <string name="sort_title_desc">제목 내림차순</string>
 
+    <!-- Write -->
+    <string name="title">제목</string>
+    <string name="content">내용</string>
 
     <!-- setting -->
     <string name="setting">설정</string>
 
     <string name="read_contacts">연락처 가져오기</string>
     <string name="read_contacts_sub">핸드폰의 연락처 정보를 현재 인물 정보와 비교 후 추가합니다</string>
+
+    <string name="upload_server">데이터 업로드</string>
+    <string name="upload_server_sub">현재 디바이스의 데이터를 서버에 덮어씁니다</string>
+
+    <string name="download_server">데이터 다운로드</string>
+    <string name="download_server_sub">서버에 있는 데이터를 디바이스에 덮어씁니다</string>
 
 </resources>

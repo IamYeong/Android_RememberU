@@ -66,6 +66,13 @@
                 layout="@layout/item_setting_read_contacts"
                 />
 
+            <include
+                layout="@layout/item_setting_upload_contacts"
+                />
+
+            <include
+                layout="@layout/item_setting_download_contacts"
+                />
 
 
         </LinearLayout>

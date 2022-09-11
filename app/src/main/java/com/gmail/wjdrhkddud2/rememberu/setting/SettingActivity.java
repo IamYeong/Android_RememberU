@@ -35,6 +35,7 @@ import com.gmail.wjdrhkddud2.rememberu.splash.SplashActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private TextView accountNameText, accountEmailText;
-    private ConstraintLayout settingLayout, readContactLayout;
+    private ConstraintLayout settingLayout, readContactLayout, uploadLayout, downloadLayout;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -59,6 +60,8 @@ public class SettingActivity extends AppCompatActivity {
         accountEmailText = findViewById(R.id.tv_email_setting);
         readContactLayout = findViewById(R.id.layout_read_contacts_setting);
         settingLayout = findViewById(R.id.layout_setting);
+        uploadLayout = findViewById(R.id.layout_upload_setting);
+        downloadLayout = findViewById(R.id.layout_download_setting);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +86,22 @@ public class SettingActivity extends AppCompatActivity {
                //
 
 
+            }
+        });
+
+        uploadLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                upload();
+            }
+        });
+
+        downloadLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                download();
             }
         });
 
@@ -203,4 +222,48 @@ public class SettingActivity extends AppCompatActivity {
         }
 
     }
+
+    private void upload() {
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
+                FirebaseFirestore store = FirebaseFirestore.getInstance();
+
+                store.collection(getApplicationContext().getPackageName());
+
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
+
+    }
+
+
+    private void download() {
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
+                FirebaseFirestore store = FirebaseFirestore.getInstance();
+                store.collection(getApplicationContext().getPackageName())
+                        .document(SharedPreferencesManager.getUID(SettingActivity.this));
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
+    }
+
 }

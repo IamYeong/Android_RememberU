@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (v.isSelected()) {
                     resultsAdapter.removeFilter();
+                    resultsAdapter.notifyDataSetChanged();
                     v.setSelected(false);
                     return;
                 }
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (v.isSelected()) {
                     resultsAdapter.removeFilter();
+                    resultsAdapter.notifyDataSetChanged();
                     v.setSelected(false);
                     return;
                 }
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (v.isSelected()) {
                     resultsAdapter.removeFilter();
+                    resultsAdapter.notifyDataSetChanged();
                     v.setSelected(false);
                     return;
                 }
@@ -174,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (v.isSelected()) {
                     resultsAdapter.removeFilter();
+                    resultsAdapter.notifyDataSetChanged();
                     v.setSelected(false);
                     return;
                 }

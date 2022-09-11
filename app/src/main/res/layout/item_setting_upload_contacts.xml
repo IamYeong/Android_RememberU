@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/layout_upload_setting"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:foreground="?attr/selectableItemBackground"
+    android:layout_marginTop="10dp"
+    >
+
+    <ImageView
+        android:id="@+id/img_upload_setting"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_normal_default"
+        android:src="@drawable/ic_baseline_cloud_upload_24"
+        android:padding="10dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_title_upload_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/img_upload_setting"
+        app:layout_constraintBottom_toTopOf="@id/tv_sub_upload_setting"
+
+        android:text="@string/upload_server"
+        android:textColor="@color/text_strong"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:textSize="10sp"
+
+        android:layout_marginStart="10dp"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_sub_upload_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_upload_setting"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/img_upload_setting"
+
+        android:text="@string/upload_server_sub"
+        android:textSize="8sp"
+
+        android:layout_marginStart="10dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

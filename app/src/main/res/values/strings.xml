@@ -44,6 +44,7 @@
 
     <!-- Add person -->
     <string name="new_person">인물 추가</string>
+    <string name="modify_person">인물 편집</string>
     <string name="person_name">이름(필수)</string>
     <string name="person_gender">성별 선택(필수)</string>
     <string name="person_phone">연락처</string>

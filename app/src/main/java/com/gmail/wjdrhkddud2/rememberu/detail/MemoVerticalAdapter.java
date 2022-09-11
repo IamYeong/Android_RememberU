@@ -18,8 +18,10 @@ import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHolder> {
 
@@ -27,6 +29,7 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
     private List<Memo> memos;
     private List<Memo> results;
     private OnMemoSelectedListener mListener;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
     public MemoVerticalAdapter(Context context) {
         this.context = context;
@@ -178,6 +181,7 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
 
         holder.getTitleText().setText(memo.getTitle());
         holder.getContentText().setText(memo.getContent().substring(0, (Math.min(memo.getContent().length(), 20))));
+        holder.getCreateDateText().setText(simpleDateFormat.format(memo.getCreate()));
 
         holder.getLayout().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,7 +203,7 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
 
 class MemoVerticalViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView titleText, contentText;
+    private TextView titleText, contentText, createDateText;
     private ConstraintLayout layout;
 
     public MemoVerticalViewHolder(@NonNull View itemView) {
@@ -208,7 +212,16 @@ class MemoVerticalViewHolder extends RecyclerView.ViewHolder {
         titleText = itemView.findViewById(R.id.tv_memo_title);
         contentText = itemView.findViewById(R.id.tv_memo_content);
         layout = itemView.findViewById(R.id.constraint_vertical_memo);
+        createDateText = itemView.findViewById(R.id.tv_create_date_detail);
 
+    }
+
+    public TextView getCreateDateText() {
+        return createDateText;
+    }
+
+    public void setCreateDateText(TextView createDateText) {
+        this.createDateText = createDateText;
     }
 
     public TextView getTitleText() {

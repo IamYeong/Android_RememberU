@@ -26,6 +26,16 @@
         />
 
     <TextView
+        android:id="@+id/tv_create_date_bookmark_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_bookmark_memo_detail"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="10sp"
+
+        />
+
+    <TextView
         android:id="@+id/tv_content_bookmark_memo_detail"
         android:layout_width="0dp"
         android:layout_height="0dp"

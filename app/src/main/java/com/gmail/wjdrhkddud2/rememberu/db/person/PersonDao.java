@@ -17,6 +17,9 @@ public interface PersonDao {
     @Delete
     void delete(Person person);
 
+    @Query("DELETE FROM PERSON WHERE hashed == :hashed")
+    void delete(String hashed);
+
     @Update
     void update(Person person);
 
@@ -28,5 +31,7 @@ public interface PersonDao {
 
     @Query("SELECT * FROM PERSON WHERE (uid == :uid) AND (hashed == :hashed)")
     Person select(String uid, String hashed);
+
+
 
 }

@@ -30,7 +30,7 @@ import java.util.Locale;
 public class ModifyMemoFragment extends Fragment {
 
     private Context context;
-    private ImageButton closeButton, bookmarkButton;
+    private ImageButton closeButton, bookmarkButton, deleteButton;
     private EditText titleField, contentField;
     private TextView dateText;
     private Button saveButton;
@@ -57,6 +57,21 @@ public class ModifyMemoFragment extends Fragment {
         titleField = view.findViewById(R.id.et_memo_title_write);
         contentField = view.findViewById(R.id.et_content_write_memo);
         bookmarkButton = view.findViewById(R.id.img_btn_bookmark_memo_write);
+        deleteButton = view.findViewById(R.id.img_btn_delete_memo);
+        deleteButton.setVisibility(View.VISIBLE);
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //dialog
+
+                RememberUDatabase db = RememberUDatabase.getInstance(context);
+                db.memoDao().delete(SharedPreferencesManager.getMemoHash(context));
+                close(context);
+
+            }
+        });
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override

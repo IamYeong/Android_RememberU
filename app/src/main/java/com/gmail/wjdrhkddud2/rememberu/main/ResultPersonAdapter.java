@@ -176,7 +176,6 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
                 Intent intent = new Intent(context, DetailActivity.class);
                 context.startActivity(intent);
 
-
             }
         });
 

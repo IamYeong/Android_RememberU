@@ -42,6 +42,19 @@
             />
 
         <ImageButton
+            android:id="@+id/img_btn_delete_memo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_date_write_memo"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/delete_outline_24"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone"
+            />
+
+        <ImageButton
             android:id="@+id/img_btn_bookmark_memo_write"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

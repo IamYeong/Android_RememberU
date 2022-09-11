@@ -3,6 +3,7 @@ package com.gmail.wjdrhkddud2.rememberu.detail;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
@@ -11,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,23 +28,27 @@ import android.widget.TextView;
 
 import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
+import com.gmail.wjdrhkddud2.rememberu.add.ModifyPersonActivity;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
 
     private ImageButton backButton, bookmarkButton, writeButton;
-    private TextView personNameText, sortText;
+    private TextView personNameText, sortText, personContentText;
     private RecyclerView allRV,markRV;
     private MemoVerticalAdapter verticalAdapter;
     private MemoHorizontalAdapter horizontalAdapter;
     private FragmentContainerView fragmentContainerView;
     private FragmentManager fragmentManager;
     private EditText searchField;
+    private ConstraintLayout infoLayout;
 
     private int sortCursor = 0;
 
@@ -61,9 +67,21 @@ public class DetailActivity extends AppCompatActivity {
         writeButton = findViewById(R.id.img_btn_add_detail);
         searchField = findViewById(R.id.et_search_detail);
         sortText = findViewById(R.id.tv_sort_detail);
+        personContentText = findViewById(R.id.tv_person_content);
+        infoLayout = findViewById(R.id.constraint_person_info);
 
         verticalAdapter = new MemoVerticalAdapter(DetailActivity.this);
         horizontalAdapter = new MemoHorizontalAdapter(DetailActivity.this);
+
+        infoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(DetailActivity.this, ModifyPersonActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
         verticalAdapter.setSelectListener(new OnMemoSelectedListener() {
             @Override
@@ -262,6 +280,26 @@ public class DetailActivity extends AppCompatActivity {
                         uid,
                         personHash
                 );
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+                        String content =
+                                getString(R.string.person_gender) + " : " + (person.getGender() == 'm' ? getString(R.string.male) : getString(R.string.female))
+                                + "\n"
+                                + getString(R.string.person_birth) + " : " + (person.getBirth() != 0 ? simpleDateFormat.format(person.getBirth()) : "NON")
+                                + "\n"
+                                + getString(R.string.person_description) + " : " + (person.getDescription() != null ? person.getDescription() : "NON")
+                                        + "\n"
+                                        + getString(R.string.person_phone) + " : " + (person.getPhoneNumber() != null ? person.getPhoneNumber() : "NON");
+
+                        personContentText.setText(content);
+
+                    }
+                });
 
                 List<Memo> memos = db.memoDao().selectByUserAndPerson(uid, personHash);
                 verticalAdapter.setMemo(memos);

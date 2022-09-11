@@ -90,6 +90,8 @@ public class WriteMemoFragment extends Fragment {
             }
         });
 
+
+
         return view;
     }
 

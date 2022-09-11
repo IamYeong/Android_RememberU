@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RememberU">
-        <activity android:name=".add.ModifyPersonActivity"></activity>
+        <activity android:name=".security.SecurityActivity"></activity>
+        <activity android:name=".add.ModifyPersonActivity" />
         <activity android:name=".detail.DetailActivity" />
         <activity android:name=".add.NewPersonActivity" />
         <activity android:name=".setting.SettingActivity" />

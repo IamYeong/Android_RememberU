@@ -36,15 +36,10 @@ public class LoadingDialog extends Dialog {
         percentageText.setText(percent);
     }
 
-    public void close() {
-        dismiss();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawableResource(R.color.transparent);
-        setCancelable(false);
         setContentView(R.layout.dialog_loading);
 
         titleText = findViewById(R.id.tv_title_loading);
@@ -52,7 +47,7 @@ public class LoadingDialog extends Dialog {
         loadingImage = findViewById(R.id.img_loading);
 
         titleText.setText(title);
-        updateProgress(0f);
+        //updateProgress(0f);
 
     }
 }

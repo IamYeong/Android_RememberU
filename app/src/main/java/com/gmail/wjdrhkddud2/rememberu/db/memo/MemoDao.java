@@ -17,6 +17,9 @@ public interface MemoDao {
     @Delete
     void delete(Memo memo);
 
+    @Query("DELETE FROM MEMO WHERE hashed == :hashed")
+    void delete(String hashed);
+
     @Update
     void update(Memo memo);
 

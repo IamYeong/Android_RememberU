@@ -152,6 +152,8 @@ public class SettingActivity extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+
+                            Log.e(getClass().getSimpleName(), "CREATE");
                             loadingDialog = new LoadingDialog(SettingActivity.this);
                             loadingDialog.setTitle(getString(R.string.read_contacts));
                             loadingDialog.show();
@@ -173,9 +175,6 @@ public class SettingActivity extends AppCompatActivity {
 
                         if (phoneCursor.moveToNext()) {
                             String number = phoneCursor.getString(phoneCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                            Log.e(getClass().getSimpleName(), "\n name : " + name + "\n number : " + number);
-
 
                             try {
 
@@ -209,7 +208,9 @@ public class SettingActivity extends AppCompatActivity {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
+
                                 float percent = (float) cursor.getPosition() / (float) cursor.getCount();
+                                Log.e(getClass().getSimpleName(), "PERCENT : " + (int)percent);
                                 loadingDialog.updateProgress(percent);
                             }
                         });
@@ -219,8 +220,9 @@ public class SettingActivity extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+
+                            Log.e(getClass().getSimpleName(), "DISMISS");
                             loadingDialog.dismiss();
-                            loadingDialog.close();
                         }
                     });
 

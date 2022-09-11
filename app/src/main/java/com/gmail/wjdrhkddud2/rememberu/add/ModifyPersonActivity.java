@@ -19,16 +19,17 @@ import com.gmail.wjdrhkddud2.rememberu.detail.ModifyMemoFragment;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class ModifyPersonActivity extends AppCompatActivity {
 
-    private ImageButton backButton, bookmarkButton;
+    private ImageButton backButton, bookmarkButton, deleteButton;
     private Button openBirthdayPickerButton, saveButton, maleButton, femaleButton;
     private EditText nameField, phoneField, descriptionField,
             birthYearField, birthMonthField, birthDayField;
-    private TextView nameMessageText;
+    private TextView nameMessageText, titleText;
 
 
     @Override
@@ -39,6 +40,8 @@ public class ModifyPersonActivity extends AppCompatActivity {
         backButton = findViewById(R.id.img_btn_back_new_person);
         bookmarkButton = findViewById(R.id.img_btn_bookmark_add);
         saveButton = findViewById(R.id.btn_save_person);
+        titleText = findViewById(R.id.tv_title_bar_new_person);
+        deleteButton = findViewById(R.id.img_btn_delete_person);
 
         openBirthdayPickerButton = findViewById(R.id.btn_open_birthday_picker_new_person);
 
@@ -54,6 +57,9 @@ public class ModifyPersonActivity extends AppCompatActivity {
         femaleButton = findViewById(R.id.btn_female_new);
 
         nameMessageText = findViewById(R.id.tv_new_person_name_message);
+
+        titleText.setText(getString(R.string.modify_person));
+        deleteButton.setVisibility(View.VISIBLE);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +116,86 @@ public class ModifyPersonActivity extends AppCompatActivity {
             }
         });
 
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //dialog
+
+                RememberUDatabase db = RememberUDatabase.getInstance(ModifyPersonActivity.this);
+                db.personDao().delete(SharedPreferencesManager.getPersonHash(ModifyPersonActivity.this));
+                finish();
+
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setUI();
+    }
+
+    private void setUI() {
+
+        RememberUDatabase db = RememberUDatabase.getInstance(ModifyPersonActivity.this);
+        Person person = db.personDao().select(
+                SharedPreferencesManager.getUID(ModifyPersonActivity.this),
+                SharedPreferencesManager.getPersonHash(ModifyPersonActivity.this)
+        );
+
+        nameField.setText(person.getName());
+        phoneField.setText(person.getName());
+        descriptionField.setText(person.getDescription());
+        long time = person.getBirth();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        birthYearField.setText(Integer.toString(year));
+        birthMonthField.setText(Integer.toString(month));
+        birthDayField.setText(Integer.toString(day));
+
+        if (person.getGender() == 'm') {
+            maleButton.setSelected(true);
+            femaleButton.setSelected(false);
+        } else if (person.getGender() == 'f') {
+            maleButton.setSelected(false);
+            femaleButton.setSelected(true);
+        } else if (person.getGender() == 'u') {
+            maleButton.setSelected(false);
+            femaleButton.setSelected(false);
+        } else {
+
+        }
+
+        bookmarkButton.setSelected(person.isBookmark());
 
     }
 

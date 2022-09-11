@@ -14,14 +14,17 @@ import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MemoHorizontalAdapter extends RecyclerView.Adapter<MemoHorizontalViewHolder> {
 
     private Context context;
     private List<Memo> memos;
     private List<Memo> results;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
     private OnMemoSelectedListener mListener;
 
@@ -67,6 +70,7 @@ public class MemoHorizontalAdapter extends RecyclerView.Adapter<MemoHorizontalVi
 
         holder.getTitleText().setText(memo.getTitle());
         holder.getContentText().setText(memo.getContent());
+        holder.getCreateDateText().setText(simpleDateFormat.format(memo.getCreate()));
 
         holder.getLayout().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +93,7 @@ public class MemoHorizontalAdapter extends RecyclerView.Adapter<MemoHorizontalVi
 class MemoHorizontalViewHolder extends RecyclerView.ViewHolder {
 
     private ConstraintLayout layout;
-    private TextView titleText, contentText;
+    private TextView titleText, contentText, createDateText;
 
     public MemoHorizontalViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -97,6 +101,15 @@ class MemoHorizontalViewHolder extends RecyclerView.ViewHolder {
         layout = itemView.findViewById(R.id.layout_memo_bookmark_detail);
         titleText = itemView.findViewById(R.id.tv_title_bookmark_memo_detail);
         contentText = itemView.findViewById(R.id.tv_content_bookmark_memo_detail);
+        createDateText = itemView.findViewById(R.id.tv_create_date_bookmark_detail);
+    }
+
+    public TextView getCreateDateText() {
+        return createDateText;
+    }
+
+    public void setCreateDateText(TextView createDateText) {
+        this.createDateText = createDateText;
     }
 
     public ConstraintLayout getLayout() {

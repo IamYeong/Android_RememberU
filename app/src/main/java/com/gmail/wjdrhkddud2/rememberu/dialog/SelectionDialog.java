@@ -10,14 +10,19 @@ import com.gmail.wjdrhkddud2.rememberu.R;
 
 public class SelectionDialog extends Dialog {
 
-
+    private OnSelectedListener selectedListener;
+    private String title = "";
 
     public SelectionDialog(@NonNull Context context) {
         super(context);
     }
 
-    public void setText(String title) {
+    public void setSelectedListener(OnSelectedListener listener) {
+        this.selectedListener = listener;
+    }
 
+    public void setText(String title) {
+        this.title = title;
     }
 
     @Override
@@ -25,8 +30,7 @@ public class SelectionDialog extends Dialog {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawableResource(R.color.transparent);
         setCancelable(false);
-        //setContentView(R.layout.dialog_nofification);
-
+        setContentView(R.layout.dialog_selection);
 
 
 

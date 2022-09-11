@@ -28,6 +28,7 @@
             />
 
         <TextView
+            android:id="@+id/tv_title_bar_new_person"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,6 +36,20 @@
             app:layout_constraintStart_toEndOf="@id/img_btn_back_new_person"
             android:layout_margin="10dp"
             android:text="@string/new_person"
+            />
+
+        <ImageButton
+            android:id="@+id/img_btn_delete_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_title_bar_new_person"
+
+            android:src="@drawable/delete_outline_24"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"
             />
 
 

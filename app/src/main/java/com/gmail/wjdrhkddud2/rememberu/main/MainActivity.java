@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -34,13 +35,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView nameText, countText, filterText, sortText;
+    private TextView nameText, countText, sortText;
     private ImageButton settingButton, addButton;
     private RecyclerView bookmarkRV, searchRV;
     private BookmarkPersonAdapter bookmarksAdapter;
     private ResultPersonAdapter resultsAdapter;
+    private Button memoExistFilteringButton, maleFilteringButton, femaleFilteringButton, unknownFilteringButton;
 
     private EditText searchField;
+    private int sortCursor = 0;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -51,11 +54,16 @@ public class MainActivity extends AppCompatActivity {
 
         nameText = findViewById(R.id.tv_name_main);
         countText = findViewById(R.id.tv_count_main);
-        filterText = findViewById(R.id.tv_filter_main);
+
         sortText = findViewById(R.id.tv_sort_main);
         settingButton = findViewById(R.id.img_btn_go_to_setting);
         addButton = findViewById(R.id.img_btn_add_main);
         searchField = findViewById(R.id.et_search_main);
+
+        memoExistFilteringButton = findViewById(R.id.btn_filter_exist_memo_main);
+        maleFilteringButton = findViewById(R.id.btn_filter_male_main);
+        femaleFilteringButton = findViewById(R.id.btn_filter_female_main);
+        unknownFilteringButton = findViewById(R.id.btn_filter_unknown_main);
 
         bookmarkRV = findViewById(R.id.rv_bookmark_main);
         searchRV = findViewById(R.id.rv_search_main);
@@ -73,17 +81,110 @@ public class MainActivity extends AppCompatActivity {
         searchRV.setLayoutManager(verticalLayoutManager);
         searchRV.setAdapter(resultsAdapter);
 
-        filterText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         sortText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                sortCursor++;
+                if (sortCursor > 1) sortCursor = 0;
+
+                switch (sortCursor) {
+
+                    case 0 :
+                        resultsAdapter.sortASC();
+                        sortText.setText(getString(R.string.sort_name));
+                        break;
+
+                    case 1 :
+                        resultsAdapter.sortDESC();
+                        sortText.setText(getString(R.string.sort_name_desc));
+                        break;
+
+                }
+
+                resultsAdapter.notifyDataSetChanged();
+
+            }
+        });
+
+        memoExistFilteringButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (v.isSelected()) {
+                    resultsAdapter.removeFilter();
+                    v.setSelected(false);
+                    return;
+                }
+
+                resultsAdapter.filteringByExistMemo();
+                resultsAdapter.notifyDataSetChanged();
+
+                maleFilteringButton.setSelected(false);
+                femaleFilteringButton.setSelected(false);
+                unknownFilteringButton.setSelected(false);
+                memoExistFilteringButton.setSelected(true);
+            }
+        });
+
+        maleFilteringButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (v.isSelected()) {
+                    resultsAdapter.removeFilter();
+                    v.setSelected(false);
+                    return;
+                }
+
+                resultsAdapter.filteringByGender('m');
+                resultsAdapter.notifyDataSetChanged();
+
+                maleFilteringButton.setSelected(true);
+                femaleFilteringButton.setSelected(false);
+                unknownFilteringButton.setSelected(false);
+                memoExistFilteringButton.setSelected(false);
+            }
+        });
+
+        femaleFilteringButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (v.isSelected()) {
+                    resultsAdapter.removeFilter();
+                    v.setSelected(false);
+                    return;
+                }
+
+                resultsAdapter.filteringByGender('f');
+                resultsAdapter.notifyDataSetChanged();
+
+                maleFilteringButton.setSelected(false);
+                femaleFilteringButton.setSelected(true);
+                unknownFilteringButton.setSelected(false);
+                memoExistFilteringButton.setSelected(false);
+
+            }
+        });
+
+        unknownFilteringButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (v.isSelected()) {
+                    resultsAdapter.removeFilter();
+                    v.setSelected(false);
+                    return;
+                }
+
+                resultsAdapter.filteringByGender('u');
+                resultsAdapter.notifyDataSetChanged();
+
+                maleFilteringButton.setSelected(false);
+                femaleFilteringButton.setSelected(false);
+                unknownFilteringButton.setSelected(true);
+                memoExistFilteringButton.setSelected(false);
             }
         });
 

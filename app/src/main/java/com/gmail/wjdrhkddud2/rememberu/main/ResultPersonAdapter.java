@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
+import com.gmail.wjdrhkddud2.rememberu.db.memo.MemoDao;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
+import com.gmail.wjdrhkddud2.rememberu.db.person.PersonDao;
 import com.gmail.wjdrhkddud2.rememberu.detail.DetailActivity;
 
 import java.util.ArrayList;
@@ -60,6 +62,83 @@ public class ResultPersonAdapter extends RecyclerView.Adapter<ResultPersonViewHo
         }
 
         notifyDataSetChanged();
+
+    }
+
+    public void sortASC() {
+
+        for (int i = results.size() - 1; i >= 0; i--) {
+
+            for (int j = 1; j <= i; j++) {
+
+                Person person = results.get(j);
+
+                //j - 1 번째 의 글자가 더 클 때 바꿔주는 것이므로 오름차순임
+                if (results.get(j - 1).getName().compareTo(person.getName()) > 0) {
+                    results.set(j, results.get(j - 1));
+                    results.set(j - 1, person);
+                }
+
+            }
+
+        }
+
+    }
+
+    public void sortDESC() {
+
+        for (int i = results.size() - 1; i >= 0; i--) {
+
+            for (int j = 1; j <= i; j++) {
+
+                Person person = results.get(j);
+
+                //j 번째 의 글자가 더 클 때 바꿔주는 것이므로 오름차순임
+                if (results.get(j - 1).getName().compareTo(person.getName()) <= 0) {
+                    results.set(j, results.get(j - 1));
+                    results.set(j - 1, person);
+                }
+
+            }
+
+        }
+
+    }
+
+    public void filteringByGender(char gender) {
+
+        results.clear();
+
+        for (Person person : people) {
+            if (person.getGender() == gender) {
+                results.add(person);
+            }
+        }
+
+    }
+
+    public void filteringByExistMemo() {
+
+        RememberUDatabase db = RememberUDatabase.getInstance(context);
+        MemoDao dao = db.memoDao();
+        results.clear();
+
+        for (Person person : people) {
+
+            int count = dao.selectByPerson(person.getHashed()).size();
+
+            if (count > 0) {
+                results.add(person);
+            }
+
+        }
+
+    }
+
+    public void removeFilter() {
+
+        results.clear();
+        results.addAll(people);
 
     }
 

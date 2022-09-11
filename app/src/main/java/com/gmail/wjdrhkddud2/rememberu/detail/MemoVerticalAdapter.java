@@ -69,6 +69,101 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
 
     }
 
+    public void sortASC() {
+
+        for (int i = results.size() - 1; i >= 0; i--) {
+
+            for (int j = 1; j <= i; j++) {
+
+                Memo memo = results.get(j);
+
+                //j 번째 의 글자가 더 클 때 바꿔주는 것이므로 오름차순임
+                if (results.get(j - 1).getTitle().compareTo(memo.getTitle()) > 0) {
+                    results.set(j, results.get(j - 1));
+                    results.set(j - 1, memo);
+                }
+
+            }
+
+        }
+
+    }
+
+    public void sortDESC() {
+
+        for (int i = results.size() - 1; i >= 0; i--) {
+
+            for (int j = 1; j <= i; j++) {
+
+                Memo memo = results.get(j);
+
+                //j 번째 의 글자가 더 클 때 바꿔주는 것이므로 오름차순임
+                if (results.get(j - 1).getTitle().compareTo(memo.getTitle()) <= 0) {
+                    results.set(j, results.get(j - 1));
+                    results.set(j - 1, memo);
+                }
+
+            }
+
+        }
+
+    }
+
+    public void sortByDateASC() {
+
+        for (int i = results.size() - 1; i >= 0; i--) {
+
+            for (int j = 1; j <= i; j++) {
+
+                Memo memo = results.get(j);
+
+                //j 번째 의 글자가 더 클 때 바꿔주는 것이므로 오름차순임
+                if (results.get(j - 1).getCreate() > memo.getCreate()) {
+                    results.set(j, results.get(j - 1));
+                    results.set(j - 1, memo);
+                }
+
+            }
+
+        }
+
+    }
+
+    public void sortByDateDESC() {
+
+        for (int i = results.size() - 1; i >= 0; i--) {
+
+            for (int j = 1; j <= i; j++) {
+
+                Memo memo = results.get(j);
+
+                //j 번째 의 글자가 더 클 때 바꿔주는 것이므로 오름차순임
+                if (results.get(j - 1).getCreate() < memo.getCreate()) {
+                    results.set(j, results.get(j - 1));
+                    results.set(j - 1, memo);
+                }
+
+            }
+
+        }
+
+    }
+
+    public void filteringWhat() {
+
+        results.clear();
+
+        for (Memo memo : memos) {
+
+            if (true) {
+                results.add(memo);
+            }
+
+        }
+
+    }
+
+
     @NonNull
     @Override
     public MemoVerticalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

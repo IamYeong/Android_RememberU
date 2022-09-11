@@ -36,13 +36,15 @@ import java.util.List;
 public class DetailActivity extends AppCompatActivity {
 
     private ImageButton backButton, bookmarkButton, writeButton;
-    private TextView personNameText;
+    private TextView personNameText, sortText;
     private RecyclerView allRV,markRV;
     private MemoVerticalAdapter verticalAdapter;
     private MemoHorizontalAdapter horizontalAdapter;
     private FragmentContainerView fragmentContainerView;
     private FragmentManager fragmentManager;
     private EditText searchField;
+
+    private int sortCursor = 0;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -58,6 +60,7 @@ public class DetailActivity extends AppCompatActivity {
         markRV = findViewById(R.id.rv_memo_bookmark_detail);
         writeButton = findViewById(R.id.img_btn_add_detail);
         searchField = findViewById(R.id.et_search_detail);
+        sortText = findViewById(R.id.tv_sort_detail);
 
         verticalAdapter = new MemoVerticalAdapter(DetailActivity.this);
         horizontalAdapter = new MemoHorizontalAdapter(DetailActivity.this);
@@ -104,6 +107,40 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 verticalAdapter.searchByWord(s.toString());
+            }
+        });
+
+        sortText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortCursor++;
+                if (sortCursor > 3) sortCursor = 0;
+
+                switch (sortCursor) {
+
+                    case 0 :
+                        verticalAdapter.sortByDateDESC();
+                        sortText.setText(getString(R.string.sort_date_desc));
+                        break;
+
+                    case 1 :
+                        verticalAdapter.sortByDateASC();
+                        sortText.setText(getString(R.string.sort_date_asc));
+                        break;
+
+                    case 2 :
+                        verticalAdapter.sortASC();
+                        sortText.setText(getString(R.string.sort_name));
+                        break;
+
+                    case 3 :
+                        verticalAdapter.sortDESC();
+                        sortText.setText(getString(R.string.sort_name_desc));
+                        break;
+
+                }
+
+                verticalAdapter.notifyDataSetChanged();
             }
         });
 

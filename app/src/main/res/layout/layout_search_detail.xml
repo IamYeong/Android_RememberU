@@ -26,20 +26,6 @@
             />
 
         <TextView
-            android:id="@+id/tv_filter_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/filter"
-
-            android:drawableEnd="@drawable/ic_baseline_filter_alt_24"
-            android:drawablePadding="5dp"
-            android:layout_marginStart="20dp"
-
-            android:gravity="center_vertical"
-            android:foreground="?attr/selectableItemBackground"
-            />
-
-        <TextView
             android:id="@+id/tv_sort_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,5 +84,38 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <android.widget.Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:background="@drawable/selector_theme_select_button"
+
+                android:textColor="@color/primary"
+                android:text="@string/filter_memo_exist"
+                android:layout_marginEnd="5dp"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+
+
+
+
+    </HorizontalScrollView>
 
 </LinearLayout>

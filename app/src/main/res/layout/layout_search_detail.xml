@@ -29,7 +29,7 @@
             android:id="@+id/tv_sort_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sort_name"
+            android:text="@string/sort_date_desc"
 
             android:drawableEnd="@drawable/ic_baseline_sort_24"
             android:drawablePadding="5dp"
@@ -60,7 +60,7 @@
 
             android:background="@drawable/item_field_default"
             android:textSize="12sp"
-            android:hint="@string/name"
+            android:hint="@string/title"
 
             android:drawableStart="@drawable/ic_baseline_search_24"
             android:drawablePadding="5dp"

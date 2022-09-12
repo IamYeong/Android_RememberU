@@ -180,7 +180,8 @@ public class MemoVerticalAdapter extends RecyclerView.Adapter<MemoVerticalViewHo
         Memo memo = results.get(holder.getAdapterPosition());
 
         holder.getTitleText().setText(memo.getTitle());
-        holder.getContentText().setText(memo.getContent().substring(0, (Math.min(memo.getContent().length(), 20))));
+        //holder.getContentText().setText(memo.getContent().substring(0, (Math.min(memo.getContent().length(), 20))));
+        holder.getContentText().setText(memo.getContent());
         holder.getCreateDateText().setText(simpleDateFormat.format(memo.getCreate()));
 
         holder.getLayout().setOnClickListener(new View.OnClickListener() {

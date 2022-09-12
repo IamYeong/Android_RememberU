@@ -68,7 +68,8 @@ public class BookmarkPersonAdapter extends RecyclerView.Adapter<BookmarkPersonVi
         if (person.getPhoneNumber().length() == 0) person.setPhoneNumber(context.getString(R.string.empty_phone_number));
 
         String content =
-                person.getDescription().substring(0, Math.min(person.getDescription().length(), 20))
+                person.getDescription()
+                //person.getDescription().substring(0, Math.min(person.getDescription().length(), 20))
                 + "\n\n"
                 + person.getPhoneNumber();
 

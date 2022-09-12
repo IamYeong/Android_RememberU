@@ -148,12 +148,12 @@ public class DetailActivity extends AppCompatActivity {
 
                     case 2 :
                         verticalAdapter.sortASC();
-                        sortText.setText(getString(R.string.sort_name));
+                        sortText.setText(getString(R.string.sort_title_asc));
                         break;
 
                     case 3 :
                         verticalAdapter.sortDESC();
-                        sortText.setText(getString(R.string.sort_name_desc));
+                        sortText.setText(getString(R.string.sort_title_desc));
                         break;
 
                 }
@@ -303,6 +303,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 List<Memo> memos = db.memoDao().selectByUserAndPerson(uid, personHash);
                 verticalAdapter.setMemo(memos);
+                verticalAdapter.sortByDateDESC();
                 horizontalAdapter.setMemo(memos);
 
                 handler.post(new Runnable() {
@@ -327,6 +328,7 @@ public class DetailActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragment_container_detail, fragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
     }

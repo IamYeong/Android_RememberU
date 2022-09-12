@@ -70,6 +70,7 @@ public class MemoHorizontalAdapter extends RecyclerView.Adapter<MemoHorizontalVi
 
         holder.getTitleText().setText(memo.getTitle());
         holder.getContentText().setText(memo.getContent());
+
         holder.getCreateDateText().setText(simpleDateFormat.format(memo.getCreate()));
 
         holder.getLayout().setOnClickListener(new View.OnClickListener() {

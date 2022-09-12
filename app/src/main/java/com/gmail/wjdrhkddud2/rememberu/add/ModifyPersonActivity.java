@@ -25,8 +25,8 @@ import java.util.Locale;
 
 public class ModifyPersonActivity extends AppCompatActivity {
 
-    private ImageButton backButton, bookmarkButton, deleteButton;
-    private Button openBirthdayPickerButton, saveButton, maleButton, femaleButton;
+    private ImageButton backButton, bookmarkButton, deleteButton, calendarButton;
+    private Button saveButton, maleButton, femaleButton;
     private EditText nameField, phoneField, descriptionField,
             birthYearField, birthMonthField, birthDayField;
     private TextView nameMessageText, titleText;
@@ -43,7 +43,7 @@ public class ModifyPersonActivity extends AppCompatActivity {
         titleText = findViewById(R.id.tv_title_bar_new_person);
         deleteButton = findViewById(R.id.img_btn_delete_person);
 
-        openBirthdayPickerButton = findViewById(R.id.btn_open_birthday_picker_new_person);
+        calendarButton = findViewById(R.id.btn_open_birthday_picker_new_person);
 
         nameField = findViewById(R.id.et_name_new_person);
         descriptionField = findViewById(R.id.et_description_new_person);
@@ -91,9 +91,11 @@ public class ModifyPersonActivity extends AppCompatActivity {
             }
         });
 
-        openBirthdayPickerButton.setOnClickListener(new View.OnClickListener() {
+        calendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
 
             }
         });
@@ -168,7 +170,7 @@ public class ModifyPersonActivity extends AppCompatActivity {
         );
 
         nameField.setText(person.getName());
-        phoneField.setText(person.getName());
+        phoneField.setText(person.getPhoneNumber());
         descriptionField.setText(person.getDescription());
         long time = person.getBirth();
         Calendar calendar = Calendar.getInstance();
@@ -178,9 +180,13 @@ public class ModifyPersonActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        birthYearField.setText(Integer.toString(year));
-        birthMonthField.setText(Integer.toString(month));
-        birthDayField.setText(Integer.toString(day));
+        String y = Integer.toString(year);
+        String m = (month < 10 ? ("0" + month) : ("" + month));
+        String d = (day < 10 ? ("0" + day) : ("" + day));
+
+        birthYearField.setText(y);
+        birthMonthField.setText(m);
+        birthDayField.setText(d);
 
         if (person.getGender() == 'm') {
             maleButton.setSelected(true);

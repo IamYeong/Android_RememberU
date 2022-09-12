@@ -25,8 +25,8 @@ import java.util.Locale;
 
 public class NewPersonActivity extends AppCompatActivity {
 
-    private ImageButton backButton, bookmarkButton;
-    private Button openBirthdayPickerButton, saveButton, maleButton, femaleButton;
+    private ImageButton backButton, bookmarkButton, calendarButton;
+    private Button saveButton, maleButton, femaleButton;
     private EditText nameField, phoneField, descriptionField,
     birthYearField, birthMonthField, birthDayField;
     private TextView nameMessageText;
@@ -41,7 +41,7 @@ public class NewPersonActivity extends AppCompatActivity {
         bookmarkButton = findViewById(R.id.img_btn_bookmark_add);
         saveButton = findViewById(R.id.btn_save_person);
 
-        openBirthdayPickerButton = findViewById(R.id.btn_open_birthday_picker_new_person);
+        calendarButton = findViewById(R.id.btn_open_birthday_picker_new_person);
 
         nameField = findViewById(R.id.et_name_new_person);
         descriptionField = findViewById(R.id.et_description_new_person);
@@ -101,7 +101,7 @@ public class NewPersonActivity extends AppCompatActivity {
             }
         });
 
-        openBirthdayPickerButton.setOnClickListener(new View.OnClickListener() {
+        calendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

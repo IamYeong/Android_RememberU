@@ -38,15 +38,17 @@
     <TextView
         android:id="@+id/tv_content_bookmark_memo_detail"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:textSize="10sp"
-        app:layout_constraintTop_toBottomOf="@id/tv_title_bookmark_memo_detail"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="5dp"
 
-        android:gravity="bottom|start"
+
+        android:layout_marginTop="5dp"
+
+        android:maxLines="5"
         />
 
 

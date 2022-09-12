@@ -95,15 +95,17 @@
                     android:layout_marginTop="20dp"
                     />
 
-                <EditText
+                <android.widget.EditText
                     android:id="@+id/et_name_new_person"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/item_field_primary_outline"
-                    android:textCursorDrawable="@drawable/field_cursor_primary"
-                    android:padding="10dp"
-                    android:maxLines="1"
                     android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textCursorDrawable="@drawable/field_cursor_primary"
+                    android:layout_gravity="center_vertical"
+
                     />
 
                 <TextView
@@ -166,7 +168,7 @@
                     >
 
 
-                    <EditText
+                    <android.widget.EditText
                         android:id="@+id/et_birth_year_new_person"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
@@ -186,7 +188,7 @@
                         />
 
 
-                    <EditText
+                    <android.widget.EditText
                         android:id="@+id/et_birth_month_new_person"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
@@ -208,7 +210,7 @@
                         />
 
 
-                    <EditText
+                    <android.widget.EditText
                         android:id="@+id/et_birth_day_new_person"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
@@ -229,7 +231,7 @@
 
                         />
 
-                    <android.widget.Button
+                    <ImageButton
                         android:id="@+id/btn_open_birthday_picker_new_person"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
@@ -239,6 +241,7 @@
                         android:background="@drawable/selector_theme_button"
 
                         android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_baseline_calendar_month_24"
                         />
 
 
@@ -252,7 +255,7 @@
                     android:layout_marginTop="20dp"
                     />
 
-                <EditText
+                <android.widget.EditText
                     android:id="@+id/et_phone_new_person"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -272,7 +275,7 @@
                     android:layout_marginTop="20dp"
                     />
 
-                <EditText
+                <android.widget.EditText
                     android:id="@+id/et_description_new_person"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"

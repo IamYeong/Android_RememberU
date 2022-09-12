@@ -15,6 +15,8 @@ public class SharedPreferencesManager {
     private static final String USER_EMAIL = SHARED_PREFERENCES_NAME + "user.email";
     private static final String USER_DISPLAY_NAME = SHARED_PREFERENCES_NAME + "user.name";
     private static final String USER_EMAIL_PASSWORD = SHARED_PREFERENCES_NAME + "user.password";
+    private static final String USER_DOWNLOAD_DATE = SHARED_PREFERENCES_NAME + "user.download.time";
+    private static final String USER_UPLOAD_DATE = SHARED_PREFERENCES_NAME + "user.upload.time";
 
     private static final String PERSON_HASH = "com.gmail.wjdrhkddud2.rememberu.sharedpreferences.person.hash";
     private static final String MEMO_HASH = "com.gmail.wjdrhkddud2.rememberu.sharedpreferences.memo.hash";
@@ -65,6 +67,28 @@ public class SharedPreferencesManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(MEMO_HASH, value);
         return editor.commit();
+    }
+
+    public static boolean setDownloadDate(Context context, long value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(USER_DOWNLOAD_DATE, value);
+        return editor.commit();
+    }
+
+    public static boolean setUploadDate(Context context, long value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(USER_UPLOAD_DATE, value);
+        return editor.commit();
+    }
+
+    public static long getUploadDate(Context context) {
+        return getPreferences(context).getLong(USER_UPLOAD_DATE, 0);
+    }
+
+    public static long getDownloadDate(Context context) {
+        return getPreferences(context).getLong(USER_DOWNLOAD_DATE, 0);
     }
 
     public static String getMemoHash(Context context) {

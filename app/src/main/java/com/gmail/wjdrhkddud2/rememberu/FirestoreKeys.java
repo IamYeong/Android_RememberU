@@ -7,6 +7,8 @@ public class FirestoreKeys {
     //document key, document name is auto create
     public static final String USER_UID = "user_uid";
     public static final String USER_PASSWORD = "user_pw";
+    public static final String USER_UPLOAD_DATE = "user_upload_date";
+    public static final String USER_DOWNLOAD_DATE = "user_download_date";
 
     public static final String PEOPLE = "people";
 

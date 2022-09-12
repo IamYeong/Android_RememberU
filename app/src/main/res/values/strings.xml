@@ -91,5 +91,25 @@
     <string name="notify_subtitle_complete_read_contacts">Contact data has been applied to this app</string>
     <string name="subtitle_exit_memo">You want exit memo editor?</string>
 
+    <string name="notify_title_upload_success">Success upload</string>
+    <string name="notify_subtitle_upload_success">Success uploaded all data!\nYou can use it when new device without re-entering data</string>
+
+    <string name="notify_title_upload_fail">Fail upload</string>
+    <string name="notify_subtitle_upload_fail">Failed upload. Please try again</string>
+
+    <string name="notify_title_download_success">Success download</string>
+    <string name="notify_subtitle_download_success">Success downloaded!\nTry it right now</string>
+
+    <string name="notify_title_download_fail">Fail download</string>
+    <string name="notify_subtitle_download_fail">Fail download. Please try again</string>
+
+    <string name="title_upload_data">Upload data</string>
+    <string name="subtitle_upload_data">Overwrite data to server?</string>
+
+    <string name="title_download_data">Download data</string>
+    <string name="subtitle_download_data">Overwrite server data this device?</string>
+
+    <string name="notify_title_can_not_download">Download reject</string>
+    <string name="notify_subtitle_can_not_download">May be latest data or failed load sync data</string>
 
 </resources>

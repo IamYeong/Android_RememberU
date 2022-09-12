@@ -32,9 +32,13 @@ import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.auth.AuthActivity;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
+import com.gmail.wjdrhkddud2.rememberu.db.memo.MemoDao;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
+import com.gmail.wjdrhkddud2.rememberu.db.person.PersonDao;
 import com.gmail.wjdrhkddud2.rememberu.dialog.LoadingDialog;
 import com.gmail.wjdrhkddud2.rememberu.dialog.NotifyDialog;
+import com.gmail.wjdrhkddud2.rememberu.dialog.OnSelectedListener;
+import com.gmail.wjdrhkddud2.rememberu.dialog.SelectionDialog;
 import com.gmail.wjdrhkddud2.rememberu.splash.SplashActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,11 +48,16 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firestore.v1.FirestoreGrpc;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,7 +114,20 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                upload();
+                SelectionDialog selectionDialog = new SelectionDialog(SettingActivity.this);
+                selectionDialog.setTitle(getString(R.string.title_upload_data));
+                selectionDialog.setSubtitle(getString(R.string.subtitle_upload_data));
+                selectionDialog.setSelectedListener(new OnSelectedListener() {
+                    @Override
+                    public void onSelect(boolean selection) {
+                        if (selection) {
+                            upload();
+                        }
+                    }
+                });
+                selectionDialog.show();
+
+
             }
         });
 
@@ -113,7 +135,18 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                download();
+                SelectionDialog selectionDialog = new SelectionDialog(SettingActivity.this);
+                selectionDialog.setTitle(getString(R.string.title_download_data));
+                selectionDialog.setSubtitle(getString(R.string.subtitle_download_data));
+                selectionDialog.setSelectedListener(new OnSelectedListener() {
+                    @Override
+                    public void onSelect(boolean selection) {
+                        if (selection) {
+                            download();
+                        }
+                    }
+                });
+                selectionDialog.show();
             }
         });
 
@@ -308,6 +341,7 @@ doc - memo2
                 Map<String, Object> userData = new HashMap<>();
                 userData.put(FirestoreKeys.USER_UID, uid);
                 userData.put(FirestoreKeys.USER_PASSWORD, "");
+                userData.put(FirestoreKeys.USER_UPLOAD_DATE, Calendar.getInstance().getTime().getTime());
 
                 batch.set(userDoc, userData);
 
@@ -326,26 +360,22 @@ doc - memo2
 
                     batch.set(personDoc, personData);
 
-                    for (Memo m : memo) {
+                }
 
-                        if (m.getPersonHashed().equals(person.getHashed())) {
+                for (Memo m : memo) {
 
-                            DocumentReference memoDoc = personDoc.collection(FirestoreKeys.MEMO).document();
-                            Map<String, Object> memoData = new HashMap<>();
-                            memoData.put(FirestoreKeys.MEMO_HASHED, m.getHashed());
-                            memoData.put(FirestoreKeys.MEMO_UID, m.getUid());
-                            memoData.put(FirestoreKeys.MEMO_PERSON_HASHED, m.getPersonHashed());
-                            memoData.put(FirestoreKeys.MEMO_TITLE, m.getTitle());
-                            memoData.put(FirestoreKeys.MEMO_CONTENT, m.getContent());
-                            memoData.put(FirestoreKeys.MEMO_CREATE_TIME, m.getCreate());
-                            memoData.put(FirestoreKeys.MEMO_UPDATE_TIME, m.getUpdate());
-                            memoData.put(FirestoreKeys.MEMO_IS_BOOKMARK, m.isBookmark());
+                    DocumentReference memoDoc = userDoc.collection(FirestoreKeys.MEMO).document();
+                    Map<String, Object> memoData = new HashMap<>();
+                    memoData.put(FirestoreKeys.MEMO_HASHED, m.getHashed());
+                    memoData.put(FirestoreKeys.MEMO_UID, m.getUid());
+                    memoData.put(FirestoreKeys.MEMO_PERSON_HASHED, m.getPersonHashed());
+                    memoData.put(FirestoreKeys.MEMO_TITLE, m.getTitle());
+                    memoData.put(FirestoreKeys.MEMO_CONTENT, m.getContent());
+                    memoData.put(FirestoreKeys.MEMO_CREATE_TIME, m.getCreate());
+                    memoData.put(FirestoreKeys.MEMO_UPDATE_TIME, m.getUpdate());
+                    memoData.put(FirestoreKeys.MEMO_IS_BOOKMARK, m.isBookmark());
 
-                            batch.set(memoDoc, memoData);
-
-                        }
-
-                    }
+                    batch.set(memoDoc, memoData);
 
                 }
 
@@ -363,12 +393,37 @@ doc - memo2
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.e(getClass().getSimpleName(), "SUCCESS : ");
+
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        NotifyDialog notifyDialog = new NotifyDialog(SettingActivity.this);
+                                        notifyDialog.setTitle(getString(R.string.notify_title_upload_success));
+                                        notifyDialog.setSubtitle(getString(R.string.notify_subtitle_upload_success));
+                                        notifyDialog.show();
+
+                                    }
+                                });
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.e(getClass().getSimpleName(), "FAILURE : ");
+
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        NotifyDialog notifyDialog = new NotifyDialog(SettingActivity.this);
+                                        notifyDialog.setTitle(getString(R.string.notify_title_upload_fail));
+                                        notifyDialog.setSubtitle(getString(R.string.notify_subtitle_upload_fail));
+                                        notifyDialog.show();
+
+                                    }
+                                });
                             }
                         });
 
@@ -382,22 +437,144 @@ doc - memo2
 
     private void download() {
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
+        //download 가 upload 보다 최근이면 아예 막을 것.
+        long upload = SharedPreferencesManager.getUploadDate(SettingActivity.this);
+        long download = SharedPreferencesManager.getDownloadDate(SettingActivity.this);
 
-                RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
-                FirebaseFirestore store = FirebaseFirestore.getInstance();
-                store.collection(getApplicationContext().getPackageName())
-                        .document(SharedPreferencesManager.getUID(SettingActivity.this));
+        if (upload < download) {
+            NotifyDialog notifyDialog = new NotifyDialog(SettingActivity.this);
+            notifyDialog.setTitle(getString(R.string.notify_title_can_not_download));
+            notifyDialog.setSubtitle(getString(R.string.notify_subtitle_can_not_download));
+            notifyDialog.show();
 
-                Looper.loop();
-            }
-        };
+            return;
+        }
 
-        thread.start();
+
+
+        FirebaseFirestore store = FirebaseFirestore.getInstance();
+        store.collection(getApplicationContext().getPackageName())
+                .document(SharedPreferencesManager.getUID(SettingActivity.this))
+                .collection(FirestoreKeys.PEOPLE)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        String uid = SharedPreferencesManager.getUID(SettingActivity.this);
+                        RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
+                        PersonDao personDao = db.personDao();
+                        //Person 문서들
+                        for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+
+                            String hash = (String)doc.get(FirestoreKeys.PERSON_HASHED);
+                            String name = (String)doc.get(FirestoreKeys.PERSON_NAME);
+                            String phone = (String)doc.get(FirestoreKeys.PERSON_PHONE);
+                            char gender = ((String)doc.get(FirestoreKeys.PERSON_GENDER)).charAt(0);
+                            long birth = (long)doc.get(FirestoreKeys.PERSON_BIRTH);
+                            String description = (String)doc.get(FirestoreKeys.PERSON_DESCRIPTION);
+                            boolean isBookmark = (boolean)doc.get(FirestoreKeys.PERSON_IS_BOOKMARK);
+
+                            Person person = new Person(hash);
+                            person.setUid(uid);
+                            person.setName(name);
+                            person.setPhoneNumber(phone);
+                            person.setGender(gender);
+                            person.setBirth(birth);
+                            person.setDescription(description);
+                            person.setBookmark(isBookmark);
+
+                            personDao.insert(person);
+
+
+                        }
+
+                        store.collection(getApplicationContext().getPackageName())
+                                .document(SharedPreferencesManager.getUID(SettingActivity.this))
+                                .collection(FirestoreKeys.MEMO)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                                    }
+                                })
+                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                                        String uid = SharedPreferencesManager.getUID(SettingActivity.this);
+                                        RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
+                                        MemoDao memoDao = db.memoDao();
+                                        //Person 문서들
+                                        for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+
+                                            String hash = (String)doc.get(FirestoreKeys.MEMO_HASHED);
+                                            String personHash = (String)doc.get(FirestoreKeys.MEMO_PERSON_HASHED);
+                                            String title = (String)doc.get(FirestoreKeys.MEMO_TITLE);
+                                            String content = (String)doc.get(FirestoreKeys.MEMO_CONTENT);
+                                            long create = (long)doc.get(FirestoreKeys.MEMO_CREATE_TIME);
+                                            long update = (long)doc.get(FirestoreKeys.MEMO_UPDATE_TIME);
+                                            boolean isBookmark = (boolean)doc.get(FirestoreKeys.MEMO_IS_BOOKMARK);
+
+                                            Memo memo = new Memo(uid, personHash, hash);
+                                            memo.setTitle(title);
+                                            memo.setContent(content);
+                                            memo.setCreate(create);
+                                            memo.setUpdate(update);
+                                            memo.setBookmark(isBookmark);
+
+                                            memoDao.insert(memo);
+
+                                        }
+
+                                        handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                SharedPreferencesManager.setDownloadDate(SettingActivity.this, Calendar.getInstance().getTime().getTime());
+
+                                                NotifyDialog notifyDialog = new NotifyDialog(SettingActivity.this);
+                                                notifyDialog.setTitle(getString(R.string.notify_title_download_success));
+                                                notifyDialog.setSubtitle(getString(R.string.notify_subtitle_download_success));
+                                                notifyDialog.show();
+
+                                            }
+                                        });
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                NotifyDialog notifyDialog = new NotifyDialog(SettingActivity.this);
+                                notifyDialog.setTitle(getString(R.string.notify_title_download_fail));
+                                notifyDialog.setSubtitle(getString(R.string.notify_subtitle_download_fail));
+                                notifyDialog.show();
+
+                            }
+                        });
+                    }
+                });
+
     }
 
 }

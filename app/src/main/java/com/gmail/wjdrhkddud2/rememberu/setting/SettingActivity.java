@@ -25,22 +25,31 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.gmail.wjdrhkddud2.rememberu.FirestoreKeys;
 import com.gmail.wjdrhkddud2.rememberu.HashConverter;
 import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.auth.AuthActivity;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
+import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
 import com.gmail.wjdrhkddud2.rememberu.dialog.LoadingDialog;
 import com.gmail.wjdrhkddud2.rememberu.dialog.NotifyDialog;
 import com.gmail.wjdrhkddud2.rememberu.splash.SplashActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -248,6 +257,26 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
+    /*
+    collection --rememberu
+
+doc - user
+doc - user2
+...
+
+collection -- people
+
+doc - person
+doc - person2
+...
+
+collection -- memo
+
+doc - memo
+doc - memo2
+...
+     */
+
     private void upload() {
 
         Thread thread = new Thread() {
@@ -257,10 +286,91 @@ public class SettingActivity extends AppCompatActivity {
                 Looper.prepare();
 
                 RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
+
+                String uid = SharedPreferencesManager.getUID(SettingActivity.this);
+                List<Person> people = db.personDao().selectAll(uid);
+                List<Memo> memo = db.memoDao().selectAll(uid);
+                //사람의 해시로 메모리스트에서 부분리스트를 찾아 서버에 보내면 된다.
+
                 FirebaseFirestore store = FirebaseFirestore.getInstance();
 
-                store.collection(getApplicationContext().getPackageName());
+                //어떤 문서에 데이터 집합을 업데이트,
+                //어떤 문서를 삭제,
+                //어떤 문서의 어떤 필드를 업데이트
+                //위와 같은 트랜잭션을 한 번에 수행 후 보낼 수 있음.
+                WriteBatch batch = store.batch();
 
+
+                //1. user 정보 업데이트
+                DocumentReference userDoc = store.collection(getApplicationContext().getPackageName())
+                        .document(uid);
+
+                Map<String, Object> userData = new HashMap<>();
+                userData.put(FirestoreKeys.USER_UID, uid);
+                userData.put(FirestoreKeys.USER_PASSWORD, "");
+
+                batch.set(userDoc, userData);
+
+                for (Person person : people) {
+
+                    DocumentReference personDoc = userDoc.collection(FirestoreKeys.PEOPLE).document();
+                    Map<String, Object> personData = new HashMap<>();
+                    personData.put(FirestoreKeys.PERSON_HASHED, person.getHashed());
+                    personData.put(FirestoreKeys.PERSON_UID, person.getUid());
+                    personData.put(FirestoreKeys.PERSON_NAME, person.getName());
+                    personData.put(FirestoreKeys.PERSON_PHONE, person.getPhoneNumber());
+                    personData.put(FirestoreKeys.PERSON_GENDER, person.getGender() + "");
+                    personData.put(FirestoreKeys.PERSON_BIRTH, person.getBirth());
+                    personData.put(FirestoreKeys.PERSON_DESCRIPTION, person.getDescription());
+                    personData.put(FirestoreKeys.PERSON_IS_BOOKMARK, person.isBookmark());
+
+                    batch.set(personDoc, personData);
+
+                    for (Memo m : memo) {
+
+                        if (m.getPersonHashed().equals(person.getHashed())) {
+
+                            DocumentReference memoDoc = personDoc.collection(FirestoreKeys.MEMO).document();
+                            Map<String, Object> memoData = new HashMap<>();
+                            memoData.put(FirestoreKeys.MEMO_HASHED, m.getHashed());
+                            memoData.put(FirestoreKeys.MEMO_UID, m.getUid());
+                            memoData.put(FirestoreKeys.MEMO_PERSON_HASHED, m.getPersonHashed());
+                            memoData.put(FirestoreKeys.MEMO_TITLE, m.getTitle());
+                            memoData.put(FirestoreKeys.MEMO_CONTENT, m.getContent());
+                            memoData.put(FirestoreKeys.MEMO_CREATE_TIME, m.getCreate());
+                            memoData.put(FirestoreKeys.MEMO_UPDATE_TIME, m.getUpdate());
+                            memoData.put(FirestoreKeys.MEMO_IS_BOOKMARK, m.isBookmark());
+
+                            batch.set(memoDoc, memoData);
+
+                        }
+
+                    }
+
+                }
+
+
+                batch.commit()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                Log.e(getClass().getSimpleName(), "COMPLETE : ");
+
+                            }
+                        })
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.e(getClass().getSimpleName(), "SUCCESS : ");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(getClass().getSimpleName(), "FAILURE : ");
+                            }
+                        });
 
                 Looper.loop();
             }

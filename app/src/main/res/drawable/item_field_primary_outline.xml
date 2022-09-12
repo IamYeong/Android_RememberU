@@ -3,12 +3,12 @@
 
     <item
         android:state_focused="true"
-        android:drawable="@drawable/item_outline_rounded_primary"
+        android:drawable="@drawable/item_field_primary_outline_and_fill"
         />
 
     <item
         android:state_focused="false"
-        android:drawable="@drawable/item_outline_rounded_secondary"
+        android:drawable="@drawable/item_field_default"
         />
 
 </selector>

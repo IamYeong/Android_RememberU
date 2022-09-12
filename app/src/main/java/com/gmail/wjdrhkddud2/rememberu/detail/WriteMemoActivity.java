@@ -1,16 +1,10 @@
 package com.gmail.wjdrhkddud2.rememberu.detail;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,49 +15,36 @@ import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class WriteMemoFragment extends Fragment {
+public class WriteMemoActivity extends AppCompatActivity {
 
-    private Context context;
     private ImageButton closeButton, bookmarkButton;
     private EditText titleField, contentField;
     private TextView dateText;
     private Button saveButton;
 
-    private OnFragmentDetachListener detachListener;
-
-    public WriteMemoFragment() {
-        // Required empty public constructor
-    }
-
-    public void setDetachListener(OnFragmentDetachListener listener) {
-        this.detachListener = listener;
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_write_memo, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_write_memo);
 
-        closeButton = view.findViewById(R.id.img_btn_close_write);
-        saveButton = view.findViewById(R.id.btn_save_memo);
-        dateText = view.findViewById(R.id.tv_date_write_memo);
-        titleField = view.findViewById(R.id.et_memo_title_write);
-        contentField = view.findViewById(R.id.et_content_write_memo);
-        bookmarkButton = view.findViewById(R.id.img_btn_bookmark_memo_write);
+        closeButton = findViewById(R.id.img_btn_close_write);
+        saveButton = findViewById(R.id.btn_save_memo);
+        dateText = findViewById(R.id.tv_date_write_memo);
+        titleField = findViewById(R.id.et_memo_title_write);
+        contentField = findViewById(R.id.et_content_write_memo);
+        bookmarkButton = findViewById(R.id.img_btn_bookmark_memo_write);
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                close(context);
+                finish();
 
             }
         });
@@ -75,10 +56,10 @@ public class WriteMemoFragment extends Fragment {
                 Memo memo = isExactly();
                 if (memo == null) return;
 
-                RememberUDatabase db = RememberUDatabase.getInstance(context);
+                RememberUDatabase db = RememberUDatabase.getInstance(WriteMemoActivity.this);
                 db.memoDao().insert(memo);
 
-                close(context);
+                finish();
 
             }
         });
@@ -89,35 +70,19 @@ public class WriteMemoFragment extends Fragment {
                 bookmarkButton.setSelected(!bookmarkButton.isSelected());
             }
         });
-
-
-
-        return view;
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-        dateText.setText(simpleDateFormat.format(Calendar.getInstance().getTime().getTime()));
-
-    }
-
-    @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    protected void onResume() {
+        super.onResume();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        dateText.setText(simpleDateFormat.format(Calendar.getInstance().getTime().getTime()));
     }
 
     private Memo isExactly() {
@@ -138,8 +103,8 @@ public class WriteMemoFragment extends Fragment {
         long time = Calendar.getInstance().getTime().getTime();
         try {
 
-            String uid = SharedPreferencesManager.getUID(context);
-            String personHash = SharedPreferencesManager.getPersonHash(context);
+            String uid = SharedPreferencesManager.getUID(WriteMemoActivity.this);
+            String personHash = SharedPreferencesManager.getPersonHash(WriteMemoActivity.this);
 
             Memo memo = new Memo(
                     uid,
@@ -161,15 +126,5 @@ public class WriteMemoFragment extends Fragment {
         }
 
     }
-
-    private void close(Context context) {
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(WriteMemoFragment.this);
-        fragmentTransaction.commit();
-        detachListener.onDetach();
-
-    }
-
-
 
 }

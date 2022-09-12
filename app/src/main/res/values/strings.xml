@@ -7,6 +7,7 @@
 
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
+    <string name="save">저장</string>
 
     <string name="not_auth">인증정보가 없습니다</string>
 
@@ -76,5 +77,15 @@
 
     <string name="download_server">데이터 다운로드</string>
     <string name="download_server_sub">서버에 있는 데이터를 디바이스에 덮어씁니다</string>
+
+    <!-- Dialog -->
+    <string name="title_app_terminate">앱 종료</string>
+    <string name="subtitle_app_terminate">앱을 완전히 종료하시겠습니까?</string>
+
+    <string name="title_delete_person">인물 삭제</string>
+    <string name="subtitle_delete_person">해당 인물정보와 메모를 완전히 삭제하시겠습니까?</string>
+
+    <string name="title_delete_memo">메모 삭제</string>
+    <string name="subtitle_delete_memo">해당 메모를 완전히 삭제하시겠습니까?</string>
 
 </resources>

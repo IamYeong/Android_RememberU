@@ -48,7 +48,7 @@ public class DetailActivity extends AppCompatActivity {
     private FragmentContainerView fragmentContainerView;
     private FragmentManager fragmentManager;
     private EditText searchField;
-    private ConstraintLayout infoLayout;
+    private ConstraintLayout infoLayout, activityLayout;
 
     private int sortCursor = 0;
 
@@ -69,6 +69,7 @@ public class DetailActivity extends AppCompatActivity {
         sortText = findViewById(R.id.tv_sort_detail);
         personContentText = findViewById(R.id.tv_person_content);
         infoLayout = findViewById(R.id.constraint_person_info);
+        activityLayout = findViewById(R.id.layout_detail_activity);
 
         verticalAdapter = new MemoVerticalAdapter(DetailActivity.this);
         horizontalAdapter = new MemoHorizontalAdapter(DetailActivity.this);
@@ -86,28 +87,17 @@ public class DetailActivity extends AppCompatActivity {
         verticalAdapter.setSelectListener(new OnMemoSelectedListener() {
             @Override
             public void onSelect(String hash) {
-                ModifyMemoFragment modifyMemoFragment = new ModifyMemoFragment();
-                modifyMemoFragment.setDetachListener(new OnFragmentDetachListener() {
-                    @Override
-                    public void onDetach() {
-                        selectMemo();
-                    }
-                });
-                openFragment(modifyMemoFragment);
+                Intent intent = new Intent(DetailActivity.this, ModifyMemoActivity.class);
+                startActivity(intent);
             }
         });
 
         horizontalAdapter.setSelectListener(new OnMemoSelectedListener() {
             @Override
             public void onSelect(String hash) {
-                ModifyMemoFragment modifyMemoFragment = new ModifyMemoFragment();
-                modifyMemoFragment.setDetachListener(new OnFragmentDetachListener() {
-                    @Override
-                    public void onDetach() {
-                        selectMemo();
-                    }
-                });
-                openFragment(modifyMemoFragment);
+
+                Intent intent = new Intent(DetailActivity.this, ModifyMemoActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -192,14 +182,8 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                WriteMemoFragment writeMemoFragment = new WriteMemoFragment();
-                writeMemoFragment.setDetachListener(new OnFragmentDetachListener() {
-                    @Override
-                    public void onDetach() {
-                        selectMemo();
-                    }
-                });
-                openFragment(writeMemoFragment);
+                Intent intent = new Intent(DetailActivity.this, WriteMemoActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -230,6 +214,11 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (SharedPreferencesManager.getPersonHash(DetailActivity.this) == null) {
+            finish();
+            return;
+        }
 
         selectMemo();
 
@@ -321,15 +310,6 @@ public class DetailActivity extends AppCompatActivity {
         };
 
         thread.start();
-
-    }
-
-    private void openFragment(Fragment fragment) {
-        fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container_detail, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
 
     }
 

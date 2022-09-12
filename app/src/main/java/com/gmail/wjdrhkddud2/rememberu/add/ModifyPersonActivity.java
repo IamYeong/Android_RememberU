@@ -15,6 +15,8 @@ import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
 import com.gmail.wjdrhkddud2.rememberu.detail.ModifyMemoFragment;
+import com.gmail.wjdrhkddud2.rememberu.dialog.OnSelectedListener;
+import com.gmail.wjdrhkddud2.rememberu.dialog.SelectionDialog;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -123,10 +125,23 @@ public class ModifyPersonActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //dialog
+                SelectionDialog selectionDialog = new SelectionDialog(ModifyPersonActivity.this);
+                selectionDialog.setTitle(getString(R.string.title_delete_person));
+                selectionDialog.setSubtitle(getString(R.string.subtitle_delete_person));
+                selectionDialog.setSelectedListener(new OnSelectedListener() {
+                    @Override
+                    public void onSelect(boolean selection) {
 
-                RememberUDatabase db = RememberUDatabase.getInstance(ModifyPersonActivity.this);
-                db.personDao().delete(SharedPreferencesManager.getPersonHash(ModifyPersonActivity.this));
-                finish();
+                        if (selection) {
+                            RememberUDatabase db = RememberUDatabase.getInstance(ModifyPersonActivity.this);
+                            db.personDao().delete(SharedPreferencesManager.getPersonHash(ModifyPersonActivity.this));
+                            SharedPreferencesManager.setPersonHash(ModifyPersonActivity.this, null);
+                            finish();
+                        }
+
+                    }
+                });
+                selectionDialog.show();
 
             }
         });

@@ -27,6 +27,8 @@ import com.gmail.wjdrhkddud2.rememberu.auth.AuthActivity;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
+import com.gmail.wjdrhkddud2.rememberu.dialog.OnSelectedListener;
+import com.gmail.wjdrhkddud2.rememberu.dialog.SelectionDialog;
 import com.gmail.wjdrhkddud2.rememberu.setting.SettingActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -227,6 +229,27 @@ public class MainActivity extends AppCompatActivity {
                 resultsAdapter.searchByWord(s.toString());
             }
         });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+
+        SelectionDialog selectionDialog = new SelectionDialog(MainActivity.this);
+        selectionDialog.setTitle(getString(R.string.title_app_terminate));
+        selectionDialog.setSubtitle(getString(R.string.subtitle_app_terminate));
+        selectionDialog.setSelectedListener(new OnSelectedListener() {
+            @Override
+            public void onSelect(boolean selection) {
+
+                if (selection) {
+                    finish();
+                }
+            }
+        });
+
+        selectionDialog.show();
 
     }
 

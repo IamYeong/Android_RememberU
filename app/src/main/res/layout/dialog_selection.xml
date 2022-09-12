@@ -8,22 +8,79 @@
     android:padding="20dp">
 
     <TextView
+        android:id="@+id/tv_title_selection_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+
+
+        android:textSize="15sp"
+        android:textColor="@color/text_strong"
+        android:text="TITLE"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
 
         />
 
+    <TextView
+        android:id="@+id/tv_subtitle_selection_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toBottomOf="@id/tv_title_selection_dialog"
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:layout_marginTop="10dp"
+
+        android:text="sub description"
+        />
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle_selection_dialog"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
         >
 
+        <android.widget.Button
+            android:id="@+id/btn_cancel_selection_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
 
+            android:background="@color/transparent"
+
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+
+            android:paddingHorizontal="20dp"
+
+            android:text="@string/cancel"
+            android:foreground="?attr/selectableItemBackground"
+
+            android:layout_weight="1"
+            />
+
+        <android.widget.Button
+            android:id="@+id/btn_confirm_selection_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+
+            android:background="@color/transparent"
+
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+
+            android:paddingHorizontal="20dp"
+
+            android:textColor="@color/primary"
+            android:text="@string/confirm"
+
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_weight="1"
+            />
 
 
     </LinearLayout>

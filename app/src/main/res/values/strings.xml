@@ -1,99 +1,95 @@
 <resources>
     <string name="app_name">RememberU</string>
 
+    <string name="remember" translatable="false">Remember</string>
+    <string name="u" translatable="false">U</string>
 
-    <string name="remember">Remember</string>
-    <string name="u">U</string>
+    <string name="confirm">Confirm</string>
 
-    <string name="confirm">확인</string>
-    <string name="cancel">취소</string>
-    <string name="save">저장</string>
-
-    <string name="not_auth">인증정보가 없습니다</string>
+    <string name="not_auth">Can\'t certification</string>
 
     <!-- login -->
-    <string name="login">로그인</string>
-    <string name="email">이메일</string>
-    <string name="password">비밀번호</string>
+    <string name="login">Sign in</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
     <string name="google">Google</string>
-    <string name="google_login">구글계정으로 로그인</string>
-    <string name="email_login">이메일 계정으로 로그인</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_login">Sign with Google</string>
+    <string name="email_login">Sign with E-mail</string>
 
     <!-- Main -->
-    <string name="friends">friends</string>
-    <string name="memories">memories</string>
-    <string name="marks">즐겨찾기 목록</string>
-    <string name="all">모든 목록</string>
-    <string name="filter">필터</string>
-    <string name="sort_name">이름 오름차순</string>
-    <string name="sort_name_desc">이름 내림차순</string>
-    <string name="filter_gender_m">남성만</string>
-    <string name="filter_gender_f">여성만</string>
-    <string name="filter_gender_u">성별 미설정만</string>
-    <string name="filter_memo_exist">메모있는 인물만</string>
+    <string name="friends">Friends</string>
+    <string name="memories">Memo</string>
+    <string name="marks">Bookmarks</string>
+    <string name="all">All</string>
+    <string name="filter">Filter</string>
+    <string name="sort_name">Ascending name</string>
+    <string name="sort_name_desc">Descending name</string>
+    <string name="filter_gender_m">Only male</string>
+    <string name="filter_gender_f">Only female</string>
+    <string name="filter_gender_u">Only unknown gender</string>
+    <string name="filter_memo_exist">Only exist memo</string>
 
-    <string name="sort_birth">나이순</string>
-    <string name="sort_latest">최근 추가순</string>
-    <string name="results">검색결과</string>
-    <string name="name">이름</string>
-    <string name="others">기타</string>
+    <string name="sort_birth">Order of age</string>
+    <string name="sort_latest">Latest</string>
+    <string name="results">Results</string>
+    <string name="name">Name</string>
+    <string name="others">Other</string>
 
-    <string name="empty_phone_number">전화번호 없음</string>
-    <string name="empty_description">설명없음</string>
+    <string name="empty_phone_number">Not have phone number</string>
+    <string name="empty_description">Not have description</string>
 
     <!-- Add person -->
-    <string name="new_person">인물 추가</string>
-    <string name="modify_person">인물 편집</string>
-    <string name="person_name">이름(필수)</string>
-    <string name="person_gender">성별 선택(필수)</string>
-    <string name="person_phone">연락처</string>
-    <string name="person_year_old">출생년도</string>
-    <string name="person_birth">생일</string>
-    <string name="person_email">이메일</string>
-    <string name="person_description">한 줄 설명</string>
-    <string name="male">남성</string>
-    <string name="female">여성</string>
+    <string name="new_person">Add person</string>
+    <string name="modify_person">Modify person</string>
+    <string name="person_name">Name(require)</string>
+    <string name="person_gender">Gender(require)</string>
+    <string name="person_phone">Phone number</string>
+    <string name="person_year_old">Birthday</string>
+    <string name="person_birth">Birthday</string>
+    <string name="person_email">E-mail</string>
+    <string name="person_description">Short description</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
     <!-- Detail -->
-    <string name="sort_date_desc">최신 작성순</string>
-    <string name="sort_date_asc">오래된 작성순</string>
-    <string name="sort_title_asc">제목 오름차순</string>
-    <string name="sort_title_desc">제목 내림차순</string>
+    <string name="sort_date_desc">Latest</string>
+    <string name="sort_date_asc">Oldest</string>
+    <string name="sort_title_asc">Ascending title</string>
+    <string name="sort_title_desc">Descending title</string>
 
     <!-- Write -->
-    <string name="title">제목</string>
-    <string name="content">내용</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
 
     <!-- setting -->
-    <string name="setting">설정</string>
+    <string name="setting">Settings</string>
 
-    <string name="read_contacts">연락처 가져오기</string>
-    <string name="read_contacts_sub">핸드폰의 연락처 정보를 현재 인물 정보와 비교 후 추가합니다</string>
+    <string name="read_contacts">Read contacts</string>
+    <string name="read_contacts_sub">Read and save contacts this app\\n(only name, phone number)</string>
 
-    <string name="upload_server">데이터 업로드</string>
-    <string name="upload_server_sub">현재 디바이스의 데이터를 서버에 덮어씁니다</string>
+    <string name="upload_server">Upload</string>
+    <string name="upload_server_sub">Upload people and memo data in this app to server</string>
 
-    <string name="download_server">데이터 다운로드</string>
-    <string name="download_server_sub">서버에 있는 데이터를 디바이스에 덮어씁니다</string>
+    <string name="download_server">Download</string>
+    <string name="download_server_sub">Overwrite people and memo data from server</string>
 
     <!-- Dialog -->
-    <string name="title_app_terminate">앱 종료</string>
-    <string name="subtitle_app_terminate">앱을 완전히 종료하시겠습니까?</string>
+    <string name="title_app_terminate">Terminate application</string>
+    <string name="subtitle_app_terminate">Exit from this app?</string>
 
-    <string name="title_delete_person">인물 삭제</string>
-    <string name="subtitle_delete_person">해당 인물정보와 메모를 완전히 삭제하시겠습니까?</string>
+    <string name="title_delete_person">Delete person</string>
+    <string name="subtitle_delete_person">You want delete this person and memo data?</string>
 
-    <string name="title_delete_memo">메모 삭제</string>
-    <string name="subtitle_delete_memo">해당 메모를 완전히 삭제하시겠습니까?</string>
+    <string name="title_delete_memo">Delete memo</string>
+    <string name="subtitle_delete_memo">You want delete this memo?</string>
 
-    <string name="title_exit_memo">메모 편집 중단</string>
-    <string name="subtitle_exit_memo">현재 편집 중이던 메모를 저장하지 않고\n편집화면을 닫으시겠습니까?</string>
+    <string name="title_exit_memo">Terminate</string>
 
-    <string name="notify_title_complete_read_contacts">완료 알림</string>
-    <string name="notify_subtitle_complete_read_contacts">연락처 인물정보가 앱에 적용되었습니다\n(단, 중복되는 이름/연락처를 가지고 있다면 적용하지 않습니다)</string>
-
+    <string name="notify_title_complete_read_contacts">Complete</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="notify_subtitle_complete_read_contacts">Contact data has been applied to this app</string>
+    <string name="subtitle_exit_memo">You want exit memo editor?</string>
 
 
 </resources>

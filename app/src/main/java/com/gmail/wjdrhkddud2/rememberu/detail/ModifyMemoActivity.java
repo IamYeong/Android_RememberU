@@ -72,7 +72,20 @@ public class ModifyMemoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                finish();
+                SelectionDialog selectionDialog = new SelectionDialog(ModifyMemoActivity.this);
+                selectionDialog.setTitle(getString(R.string.title_exit_memo));
+                selectionDialog.setSubtitle(getString(R.string.subtitle_exit_memo));
+                selectionDialog.setSelectedListener(new OnSelectedListener() {
+                    @Override
+                    public void onSelect(boolean selection) {
+
+                        if (selection) {
+                            finish();
+                        }
+                    }
+                });
+
+                selectionDialog.show();
 
             }
         });
@@ -117,6 +130,27 @@ public class ModifyMemoActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         dateText.setText(simpleDateFormat.format(memo.getCreate()));
         bookmarkButton.setSelected(memo.isBookmark());
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+
+        SelectionDialog selectionDialog = new SelectionDialog(ModifyMemoActivity.this);
+        selectionDialog.setTitle(getString(R.string.title_exit_memo));
+        selectionDialog.setSubtitle(getString(R.string.subtitle_exit_memo));
+        selectionDialog.setSelectedListener(new OnSelectedListener() {
+            @Override
+            public void onSelect(boolean selection) {
+
+                if (selection) {
+                    finish();
+                }
+            }
+        });
+
+        selectionDialog.show();
+
     }
 
     private Memo isExactly() {

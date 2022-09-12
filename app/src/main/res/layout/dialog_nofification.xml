@@ -10,27 +10,46 @@
         android:id="@+id/tv_title_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/nanum_barun_gothic_light"
-        android:text="사용자 알림 메시지"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:text="제목"
+        android:textSize="15sp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <TextView
-        android:id="@+id/tv_confirm_notification"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_subtitle_notification_dialog"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/primary"
-        android:textSize="15sp"
+        android:text="SUBTITLE"
 
         app:layout_constraintTop_toBottomOf="@id/tv_title_notification"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        />
 
+    <android.widget.Button
+        android:id="@+id/btn_confirm_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+
+        android:background="@color/transparent"
+
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+
+        android:paddingHorizontal="20dp"
+
+        android:textColor="@color/primary"
         android:text="@string/confirm"
+
+        android:foreground="?attr/selectableItemBackground"
+
+
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle_notification_dialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="10dp"
         />
 

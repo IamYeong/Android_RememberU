@@ -15,6 +15,9 @@ import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.memo.Memo;
+import com.gmail.wjdrhkddud2.rememberu.dialog.OnSelectedListener;
+import com.gmail.wjdrhkddud2.rememberu.dialog.SelectionDialog;
+import com.gmail.wjdrhkddud2.rememberu.main.MainActivity;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -44,7 +47,20 @@ public class WriteMemoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                finish();
+                SelectionDialog selectionDialog = new SelectionDialog(WriteMemoActivity.this);
+                selectionDialog.setTitle(getString(R.string.title_exit_memo));
+                selectionDialog.setSubtitle(getString(R.string.subtitle_exit_memo));
+                selectionDialog.setSelectedListener(new OnSelectedListener() {
+                    @Override
+                    public void onSelect(boolean selection) {
+
+                        if (selection) {
+                            finish();
+                        }
+                    }
+                });
+
+                selectionDialog.show();
 
             }
         });
@@ -83,6 +99,27 @@ public class WriteMemoActivity extends AppCompatActivity {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         dateText.setText(simpleDateFormat.format(Calendar.getInstance().getTime().getTime()));
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+
+        SelectionDialog selectionDialog = new SelectionDialog(WriteMemoActivity.this);
+        selectionDialog.setTitle(getString(R.string.title_exit_memo));
+        selectionDialog.setSubtitle(getString(R.string.subtitle_exit_memo));
+        selectionDialog.setSelectedListener(new OnSelectedListener() {
+            @Override
+            public void onSelect(boolean selection) {
+
+                if (selection) {
+                    finish();
+                }
+            }
+        });
+
+        selectionDialog.show();
+
     }
 
     private Memo isExactly() {

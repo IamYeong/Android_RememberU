@@ -88,4 +88,7 @@
     <string name="title_delete_memo">메모 삭제</string>
     <string name="subtitle_delete_memo">해당 메모를 완전히 삭제하시겠습니까?</string>
 
+    <string name="title_exit_memo">메모 편집 중단</string>
+    <string name="subtitle_exit_memo">현재 편집 중이던 메모를 저장하지 않고\n편집화면을 닫으시겠습니까?</string>
+
 </resources>

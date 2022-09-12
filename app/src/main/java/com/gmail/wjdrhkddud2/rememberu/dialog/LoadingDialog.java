@@ -32,7 +32,7 @@ public class LoadingDialog extends Dialog {
     public void updateProgress(float percentage) {
 
         this.percentage = percentage;
-        String percent = Integer.toString(((int)this.percentage)) + " %";
+        String percent = Integer.toString((int)(this.percentage * 100f)) + " %";
         percentageText.setText(percent);
     }
 
@@ -40,6 +40,7 @@ public class LoadingDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawableResource(R.color.transparent);
+        setCancelable(false);
         setContentView(R.layout.dialog_loading);
 
         titleText = findViewById(R.id.tv_title_loading);

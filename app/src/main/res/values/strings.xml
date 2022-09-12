@@ -91,4 +91,9 @@
     <string name="title_exit_memo">메모 편집 중단</string>
     <string name="subtitle_exit_memo">현재 편집 중이던 메모를 저장하지 않고\n편집화면을 닫으시겠습니까?</string>
 
+    <string name="notify_title_complete_read_contacts">완료 알림</string>
+    <string name="notify_subtitle_complete_read_contacts">연락처 인물정보가 앱에 적용되었습니다\n(단, 중복되는 이름/연락처를 가지고 있다면 적용하지 않습니다)</string>
+
+
+
 </resources>

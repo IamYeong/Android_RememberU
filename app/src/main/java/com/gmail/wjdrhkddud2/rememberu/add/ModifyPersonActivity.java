@@ -14,7 +14,7 @@ import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.person.Person;
-import com.gmail.wjdrhkddud2.rememberu.detail.ModifyMemoFragment;
+
 import com.gmail.wjdrhkddud2.rememberu.dialog.OnSelectedListener;
 import com.gmail.wjdrhkddud2.rememberu.dialog.SelectionDialog;
 

@@ -133,118 +133,90 @@ public class SettingActivity extends AppCompatActivity {
 
         Log.e(getClass().getSimpleName(), "SELECT CONTACTS");
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
+        RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
 
-                RememberUDatabase db = RememberUDatabase.getInstance(SettingActivity.this);
+        Uri uri = ContactsContract.Contacts.CONTENT_URI;
+        String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
+        Cursor cursor = getContentResolver().query(
+                uri, null, null, null, sort
+        );
 
-                Uri uri = ContactsContract.Contacts.CONTENT_URI;
-                String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
-                Cursor cursor = getContentResolver().query(
-                        uri, null, null, null, sort
+        if (cursor.getCount() > 0) {
+
+            /*
+            loadingDialog = new LoadingDialog(SettingActivity.this);
+            loadingDialog.setTitle(getString(R.string.read_contacts));
+            loadingDialog.show();
+
+             */
+
+            while (cursor.moveToNext()) {
+
+                /*
+                Log.e(getClass().getSimpleName(), "POSITION : " + cursor.getPosition() + "\nCOUNT : " + cursor.getCount());
+                float percent = ((float)cursor.getPosition() / (float)cursor.getCount());
+                loadingDialog.updateProgress(percent);
+                Log.e(getClass().getSimpleName(), "PROGRESS : " + (int)(percent * 100f) + " %");
+
+                 */
+
+                String id = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+
+                Uri phoneURI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
+
+                Cursor phoneCursor = getContentResolver().query(
+                        phoneURI, null, selection, new String[]{id}, null
                 );
 
-                if (cursor.getCount() > 0) {
+                if (phoneCursor.moveToNext()) {
+                    String number = phoneCursor.getString(phoneCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
+                    Log.e(getClass().getSimpleName(), "\nname : " + name + "\nnumber : " + number);
 
-                            Log.e(getClass().getSimpleName(), "CREATE");
-                            loadingDialog = new LoadingDialog(SettingActivity.this);
-                            loadingDialog.setTitle(getString(R.string.read_contacts));
-                            loadingDialog.show();
-                        }
-                    });
+                    try {
 
-
-                    while (cursor.moveToNext()) {
-
-                        String id = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-                        String name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
-
-                        Uri phoneURI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                        String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
-
-                        Cursor phoneCursor = getContentResolver().query(
-                                phoneURI, null, selection, new String[]{id}, null
+                        String hash = HashConverter.hashingFromString(
+                                SharedPreferencesManager.getUID(SettingActivity.this)
+                                        + name
+                                        + number
                         );
 
-                        if (phoneCursor.moveToNext()) {
-                            String number = phoneCursor.getString(phoneCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        if (db.personDao().isExist(hash)) continue;
+                        Person person = new Person(hash);
+                        person.setUid(SharedPreferencesManager.getUID(SettingActivity.this));
+                        person.setName(name);
+                        person.setPhoneNumber(number);
+                        person.setBookmark(false);
+                        person.setGender('u');
+                        person.setBirth(0);
+                        person.setDescription("");
 
-                            try {
-
-                                String hash = HashConverter.hashingFromString(
-                                        SharedPreferencesManager.getUID(SettingActivity.this)
-                                                + name
-                                                + number
-                                );
-
-                                if (db.personDao().isExist(hash)) return;
-                                Person person = new Person(hash);
-                                person.setUid(SharedPreferencesManager.getUID(SettingActivity.this));
-                                person.setName(name);
-                                person.setPhoneNumber(number);
-                                person.setBookmark(false);
-                                person.setGender('u');
-                                person.setBirth(0);
-                                person.setDescription("");
-
-                                db.personDao().insert(person);
+                        db.personDao().insert(person);
 
 
-                            } catch (NoSuchAlgorithmException e) {
-
-                            }
-
-                        }
-
-                        phoneCursor.close();
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                float percent = (float) cursor.getPosition() / (float) cursor.getCount();
-                                Log.e(getClass().getSimpleName(), "PERCENT : " + (int)percent);
-                                loadingDialog.updateProgress(percent);
-                            }
-                        });
+                    } catch (NoSuchAlgorithmException e) {
 
                     }
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Log.e(getClass().getSimpleName(), "DISMISS");
-                            loadingDialog.dismiss();
-                        }
-                    });
-
 
                 }
 
-                cursor.close();
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        NotifyDialog dialog = new NotifyDialog(SettingActivity.this);
-                        dialog.setTitle(getString(R.string.read_contacts));
-                        dialog.show();
-                    }
-                });
+                phoneCursor.close();
 
 
-                Looper.loop();
+
             }
-        };
-        thread.start();
+        }
+
+        cursor.close();
+
+        //loadingDialog.dismiss();
+
+        NotifyDialog dialog = new NotifyDialog(SettingActivity.this);
+        dialog.setTitle(getString(R.string.notify_title_complete_read_contacts));
+        dialog.setSubtitle(getString(R.string.notify_subtitle_complete_read_contacts));
+        dialog.show();
 
     }
 

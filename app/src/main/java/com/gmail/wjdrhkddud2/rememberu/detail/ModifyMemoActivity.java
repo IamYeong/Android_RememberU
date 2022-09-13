@@ -3,6 +3,8 @@ package com.gmail.wjdrhkddud2.rememberu.detail;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,7 @@ public class ModifyMemoActivity extends AppCompatActivity {
     private EditText titleField, contentField;
     private TextView dateText;
     private Button saveButton;
+    private boolean isEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,40 @@ public class ModifyMemoActivity extends AppCompatActivity {
         bookmarkButton = findViewById(R.id.img_btn_bookmark_memo_write);
         deleteButton = findViewById(R.id.img_btn_delete_memo);
         deleteButton.setVisibility(View.VISIBLE);
+
+        titleField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isEdit = true;
+            }
+        });
+
+        contentField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isEdit = true;
+            }
+        });
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +108,11 @@ public class ModifyMemoActivity extends AppCompatActivity {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (!isEdit) {
+                    finish();
+                    return;
+                }
 
                 SelectionDialog selectionDialog = new SelectionDialog(ModifyMemoActivity.this);
                 selectionDialog.setTitle(getString(R.string.title_exit_memo));
@@ -135,6 +177,11 @@ public class ModifyMemoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+
+        if (!isEdit) {
+            finish();
+            return;
+        }
 
         SelectionDialog selectionDialog = new SelectionDialog(ModifyMemoActivity.this);
         selectionDialog.setTitle(getString(R.string.title_exit_memo));

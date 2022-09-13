@@ -450,8 +450,6 @@ doc - memo2
             return;
         }
 
-
-
         FirebaseFirestore store = FirebaseFirestore.getInstance();
         store.collection(getApplicationContext().getPackageName())
                 .document(SharedPreferencesManager.getUID(SettingActivity.this))

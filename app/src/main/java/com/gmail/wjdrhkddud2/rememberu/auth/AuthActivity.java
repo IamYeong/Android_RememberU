@@ -40,6 +40,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class AuthActivity extends AppCompatActivity {
 
+    //이메일, 비밀번호 입력받아서 링크 보내고 다이나믹 링크로 앱 복귀해서 인증완료하고
+    //비밀번호 변경 기능 넣기
+
     private EditText emailField, passwordField;
     private Button emailButton, googleButton;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();

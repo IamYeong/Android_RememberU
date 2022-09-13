@@ -63,6 +63,8 @@
 
     <!-- setting -->
     <string name="setting">Settings</string>
+    <string name="logout">Logout</string>
+
 
     <string name="read_contacts">Read contacts</string>
     <string name="read_contacts_sub">Read and save contacts this app\\n(only name, phone number)</string>

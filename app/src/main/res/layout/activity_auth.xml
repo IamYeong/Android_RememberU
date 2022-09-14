@@ -25,23 +25,25 @@
         android:id="@+id/et_email_login"
         android:layout_width="match_parent"
         style="@style/MyEditText"
-        android:background="@drawable/field_shape"
+        android:background="@drawable/item_field_primary_outline"
         android:layout_marginHorizontal="20dp"
         android:hint="@string/email"
         android:layout_marginTop="5dp"
-
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
         />
 
     <EditText
         android:id="@+id/et_password_login"
         android:layout_width="match_parent"
         style="@style/MyEditText"
-        android:background="@drawable/field_shape"
+        android:background="@drawable/item_field_primary_outline"
         android:layout_marginHorizontal="20dp"
 
         android:layout_marginTop="5dp"
         android:hint="@string/password"
-
+        android:inputType="textPassword"
+        android:maxLines="1"
         />
 
 

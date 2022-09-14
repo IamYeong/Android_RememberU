@@ -30,6 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
@@ -80,6 +82,9 @@ public class AuthActivity extends AppCompatActivity {
         emailButton = findViewById(R.id.btn_email_login);
         googleButton = findViewById(R.id.btn_google_login);
 
+        emailField.setText(SharedPreferencesManager.getUserEmail(AuthActivity.this));
+        passwordField.setText(SharedPreferencesManager.getUserEmailPassword(AuthActivity.this));
+
         emailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,10 +92,10 @@ public class AuthActivity extends AppCompatActivity {
                 String email = emailField.getText().toString();
                 String password = passwordField.getText().toString();
 
-                Log.e(getClass().getSimpleName(), "email : " + email + ", pw : " + password);
-
                 SharedPreferencesManager.setUserEmail(AuthActivity.this, email);
                 SharedPreferencesManager.setUserEmailPassword(AuthActivity.this, password);
+
+                if (checkEmailFormat(email, password)) signEmail(email, password);
 
             }
         });
@@ -130,7 +135,10 @@ public class AuthActivity extends AppCompatActivity {
         super.onResume();
 
         mAuth = FirebaseAuth.getInstance();
-        updateUI(mAuth.getCurrentUser());
+
+        String email = emailField.getText().toString();
+        String password = passwordField.getText().toString();
+        if (checkEmailFormat(email, password)) signEmail(email, password);
 
     }
 
@@ -148,6 +156,7 @@ public class AuthActivity extends AppCompatActivity {
 
 
     private void firebaseAuthWithGoogle(String idToken) {
+
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -195,6 +204,91 @@ public class AuthActivity extends AppCompatActivity {
 
     }
 
+    private boolean checkEmailFormat(String email, String password) {
 
+        if (email.length() == 0) {
+
+            return false;
+        }
+
+        if (password.length() == 0) {
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private void signEmail(String email, String password) {
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        Log.e(getClass().getSimpleName(), "SIGN COMPLETE");
+
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+
+                        FirebaseUser user = authResult.getUser();
+
+                        if (user == null) return;
+                        Log.e(getClass().getSimpleName(), "SIGN SUCCESS : " + user.getUid());
+                        if (user.isEmailVerified()) {
+
+                            updateUI(user);
+
+                        } else {
+
+                            user.sendEmailVerification();
+
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Log.e(getClass().getSimpleName(), "SIGN FAIL");
+                        createEmailAccount(email, password);
+
+                    }
+                });
+
+
+    }
+
+    private void createEmailAccount(String email, String password) {
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        Log.e(getClass().getSimpleName(), "CREATE COMPLETE");
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+
+                        Log.e(getClass().getSimpleName(), "CREATE SUCCESS");
+
+                        if (checkEmailFormat(email, password)) signEmail(email, password);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Log.e(getClass().getSimpleName(), "CREATE FAIL");
+                    }
+                });
+    }
 
 }

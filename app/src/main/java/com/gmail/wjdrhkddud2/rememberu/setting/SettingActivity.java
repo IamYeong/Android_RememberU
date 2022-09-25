@@ -127,7 +127,6 @@ public class SettingActivity extends AppCompatActivity {
                 });
                 selectionDialog.show();
 
-
             }
         });
 
@@ -326,7 +325,6 @@ doc - memo2
                 //사람의 해시로 메모리스트에서 부분리스트를 찾아 서버에 보내면 된다.
 
                 FirebaseFirestore store = FirebaseFirestore.getInstance();
-
                 //어떤 문서에 데이터 집합을 업데이트,
                 //어떤 문서를 삭제,
                 //어떤 문서의 어떤 필드를 업데이트
@@ -392,11 +390,15 @@ doc - memo2
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.e(getClass().getSimpleName(), "SUCCESS : ");
+
 
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
+
+                                        Log.e(getClass().getSimpleName(), "SUCCESS : ");
+
+                                        SharedPreferencesManager.setUploadDate(SettingActivity.this, Calendar.getInstance().getTime().getTime());
 
                                         NotifyDialog notifyDialog = new NotifyDialog(SettingActivity.this);
                                         notifyDialog.setTitle(getString(R.string.notify_title_upload_success));
@@ -411,11 +413,13 @@ doc - memo2
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.e(getClass().getSimpleName(), "FAILURE : ");
+
 
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
+
+                                        Log.e(getClass().getSimpleName(), "FAILURE : " + e.toString());
 
                                         NotifyDialog notifyDialog = new NotifyDialog(SettingActivity.this);
                                         notifyDialog.setTitle(getString(R.string.notify_title_upload_fail));
@@ -551,6 +555,7 @@ doc - memo2
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
 
+                                        Log.e(getClass().getSimpleName(), "FAIL GET MEMO : " + e.toString());
                                     }
                                 });
 
@@ -562,6 +567,9 @@ doc - memo2
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
+
+                                Log.e(getClass().getSimpleName(), "FAIL GET PEOPLE : " + e.toString());
+
 
                                 NotifyDialog notifyDialog = new NotifyDialog(SettingActivity.this);
                                 notifyDialog.setTitle(getString(R.string.notify_title_download_fail));

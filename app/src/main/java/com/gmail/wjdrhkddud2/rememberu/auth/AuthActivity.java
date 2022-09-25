@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.gmail.wjdrhkddud2.rememberu.FirestoreKeys;
 import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
@@ -39,6 +40,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AuthActivity extends AppCompatActivity {
 
@@ -190,17 +197,52 @@ public class AuthActivity extends AppCompatActivity {
         RememberUDatabase db = RememberUDatabase.getInstance(AuthActivity.this);
         boolean isExist = db.userDao().isExist(user.getUid());
         Log.e(getClass().getSimpleName(), user.getEmail() + ", " + isExist);
+        Log.e(getClass().getSimpleName(), user.getUid());
         if (!isExist) {
             db.userDao().insert(new User(user.getUid()));
+
         }
 
         SharedPreferencesManager.setUserEmail(AuthActivity.this, user.getEmail());
         SharedPreferencesManager.setUserName(AuthActivity.this, user.getDisplayName());
         SharedPreferencesManager.setUID(AuthActivity.this, user.getUid());
 
-        Intent intent = new Intent(AuthActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        FirebaseFirestore store = FirebaseFirestore.getInstance();
+        DocumentReference userDoc = store.collection(getApplicationContext().getPackageName())
+                .document(user.getUid());
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put(FirestoreKeys.USER_UID, user.getUid());
+        userData.put(FirestoreKeys.USER_PASSWORD, "");
+        userData.put(FirestoreKeys.USER_UPLOAD_DATE, Calendar.getInstance().getTime().getTime());
+
+        userDoc.set(userData)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        Log.e(getClass().getSimpleName(), "COMPLETE");
+
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e(getClass().getSimpleName(), "SUCCESS");
+
+                        Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(getClass().getSimpleName(), "FAIL");
+
+                    }
+                });
 
     }
 

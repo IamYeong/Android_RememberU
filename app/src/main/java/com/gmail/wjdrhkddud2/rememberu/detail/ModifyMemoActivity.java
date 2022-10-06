@@ -140,7 +140,7 @@ public class ModifyMemoActivity extends AppCompatActivity {
                 if (memo == null) return;
 
                 RememberUDatabase db = RememberUDatabase.getInstance(ModifyMemoActivity.this);
-                db.memoDao().insert(memo);
+                db.memoDao().update(memo);
 
                 finish();
 
@@ -216,29 +216,21 @@ public class ModifyMemoActivity extends AppCompatActivity {
         }
 
         long time = Calendar.getInstance().getTime().getTime();
-        try {
+        //try {
 
-            String uid = SharedPreferencesManager.getUID(ModifyMemoActivity.this);
-            String personHash = SharedPreferencesManager.getPersonHash(ModifyMemoActivity.this);
-
-            Memo memo = new Memo(
-                    uid,
-                    personHash,
-                    //누가 누구의 메모를 언제 썼다는 유니크한 키
-                    HashConverter.hashingFromString(uid + personHash + time)
-            );
+            RememberUDatabase db = RememberUDatabase.getInstance(ModifyMemoActivity.this);
+            Memo memo = db.memoDao().select(SharedPreferencesManager.getMemoHash(ModifyMemoActivity.this));
 
             memo.setBookmark(bookmarkButton.isSelected());
             memo.setTitle(title);
             memo.setContent(content);
-            memo.setCreate(time);
             memo.setUpdate(time);
 
             return memo;
 
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
+       // } catch (NoSuchAlgorithmException e) {
+       //     return null;
+       // }
 
     }
 }

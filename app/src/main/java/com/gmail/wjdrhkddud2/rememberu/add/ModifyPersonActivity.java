@@ -192,7 +192,7 @@ public class ModifyPersonActivity extends AppCompatActivity {
         calendar.setTimeInMillis(time);
 
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1; //0~12
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         String y = Integer.toString(year);

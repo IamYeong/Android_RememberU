@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.gmail.wjdrhkddud2.rememberu.FirestoreKeys;
 import com.gmail.wjdrhkddud2.rememberu.R;
@@ -53,6 +54,7 @@ public class AuthActivity extends AppCompatActivity {
     //비밀번호 변경 기능 넣기
 
     private EditText emailField, passwordField;
+    private TextView forgotPasswordText;
     private Button emailButton, googleButton;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private BeginSignInRequest beginSignInRequest;
@@ -86,6 +88,7 @@ public class AuthActivity extends AppCompatActivity {
 
         emailField = findViewById(R.id.et_email_login);
         passwordField = findViewById(R.id.et_password_login);
+        forgotPasswordText = findViewById(R.id.tv_forgot_password);
         emailButton = findViewById(R.id.btn_email_login);
         googleButton = findViewById(R.id.btn_google_login);
 
@@ -119,6 +122,16 @@ public class AuthActivity extends AppCompatActivity {
 
                 googleSignInClient = GoogleSignIn.getClient(AuthActivity.this, gso);
                 activityResultLauncher.launch(googleSignInClient.getSignInIntent());
+
+            }
+        });
+
+        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(AuthActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -196,8 +209,7 @@ public class AuthActivity extends AppCompatActivity {
 
         RememberUDatabase db = RememberUDatabase.getInstance(AuthActivity.this);
         boolean isExist = db.userDao().isExist(user.getUid());
-        Log.e(getClass().getSimpleName(), user.getEmail() + ", " + isExist);
-        Log.e(getClass().getSimpleName(), user.getUid());
+
         if (!isExist) {
             db.userDao().insert(new User(user.getUid()));
 
@@ -282,11 +294,13 @@ public class AuthActivity extends AppCompatActivity {
                         Log.e(getClass().getSimpleName(), "SIGN SUCCESS : " + user.getUid());
                         if (user.isEmailVerified()) {
 
+
                             updateUI(user);
 
                         } else {
 
                             user.sendEmailVerification();
+
 
                         }
 

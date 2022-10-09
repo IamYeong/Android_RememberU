@@ -17,6 +17,20 @@
     <string name="google_login">구글계정으로 로그인</string>
     <string name="email_login">이메일 계정으로 로그인</string>
 
+    <string name="forgot_password">비밀번호를 잊으셨나요?</string>
+    <string name="email_verification">인증메일 전송</string>
+
+    <string name="new_password">새 비밀번호</string>
+    <string name="new_password_confirm">새 비밀번호 확인</string>
+    <string name="change_password">비밀번호 변경</string>
+    <string name="verification_email">이메일 인증</string>
+
+    <string name="send_password_change_mail">비밀번호 변경 메일 전송</string>
+    
+    <string name="sent_password_reset_mail">비밀번호 변경 메일을 발송했습니다.\n메일함을 확인 후 변경을 완료해주세요.</string>
+    <string name="question_create_account">계정을 새로 만드시겠어요?</string>
+    <string name="sent_verification_mail">인증 메일을 보냈어요.\n링크를 클릭해서 인증을 완료해주세요.</string>
+
     <!-- Main -->
     <string name="friends">Friends</string>
     <string name="memories">Memo</string>

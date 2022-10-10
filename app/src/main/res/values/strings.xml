@@ -102,6 +102,8 @@
     <string name="title_exit_memo">Terminate</string>
 
     <string name="notify_title_complete_read_contacts">Complete</string>
+    <string name="join">Join</string>
+    <string name="notify">Notify</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="notify_subtitle_complete_read_contacts">Contact data has been applied to this app</string>

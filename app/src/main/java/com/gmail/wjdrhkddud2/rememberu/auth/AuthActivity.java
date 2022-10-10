@@ -9,8 +9,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
+import android.app.Notification;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Selection;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +26,9 @@ import com.gmail.wjdrhkddud2.rememberu.R;
 import com.gmail.wjdrhkddud2.rememberu.SharedPreferencesManager;
 import com.gmail.wjdrhkddud2.rememberu.db.RememberUDatabase;
 import com.gmail.wjdrhkddud2.rememberu.db.user.User;
+import com.gmail.wjdrhkddud2.rememberu.dialog.NotifyDialog;
+import com.gmail.wjdrhkddud2.rememberu.dialog.OnSelectedListener;
+import com.gmail.wjdrhkddud2.rememberu.dialog.SelectionDialog;
 import com.gmail.wjdrhkddud2.rememberu.main.MainActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
@@ -36,11 +43,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -53,8 +63,7 @@ public class AuthActivity extends AppCompatActivity {
     //이메일, 비밀번호 입력받아서 링크 보내고 다이나믹 링크로 앱 복귀해서 인증완료하고
     //비밀번호 변경 기능 넣기
 
-    private EditText emailField, passwordField;
-    private TextView forgotPasswordText;
+    private EditText emailField;
     private Button emailButton, googleButton;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private BeginSignInRequest beginSignInRequest;
@@ -73,6 +82,7 @@ public class AuthActivity extends AppCompatActivity {
 
                             if (account != null) {
                                 firebaseAuthWithGoogle(account.getIdToken());
+                                Log.e(getClass().getSimpleName(), "COMPLETE");
                             } else {
                                 Log.e(getClass().getSimpleName(), "account null");
                             }
@@ -81,31 +91,89 @@ public class AuthActivity extends AppCompatActivity {
                     }
             );
 
+    private ActionCodeSettings actionCodeSettings = ActionCodeSettings.newBuilder()
+            .setAndroidPackageName(
+                    getPackageName(),
+                    false,
+                    null
+                    )
+            .setUrl("https://rememberu.page.link/open")
+            .setHandleCodeInApp(true)
+            .build();
+
+    private FirebaseDynamicLinks dynamicLinks;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
         emailField = findViewById(R.id.et_email_login);
-        passwordField = findViewById(R.id.et_password_login);
-        forgotPasswordText = findViewById(R.id.tv_forgot_password);
         emailButton = findViewById(R.id.btn_email_login);
         googleButton = findViewById(R.id.btn_google_login);
 
         emailField.setText(SharedPreferencesManager.getUserEmail(AuthActivity.this));
-        passwordField.setText(SharedPreferencesManager.getUserEmailPassword(AuthActivity.this));
 
         emailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String email = emailField.getText().toString();
-                String password = passwordField.getText().toString();
 
                 SharedPreferencesManager.setUserEmail(AuthActivity.this, email);
-                SharedPreferencesManager.setUserEmailPassword(AuthActivity.this, password);
 
-                if (checkEmailFormat(email, password)) signEmail(email, password);
+                //if (checkEmailFormat(email)) signEmail(email);
+
+                mAuth.sendSignInLinkToEmail(email, actionCodeSettings)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                Log.e(getClass().getSimpleName(), "SENT COMPLETE");
+
+                            }
+                        })
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.e(getClass().getSimpleName(), "SENT SUCCESS");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(getClass().getSimpleName(), "SENT FAIL" + e.toString());
+                            }
+                        });
+
+                /*
+                dynamicLinks
+                        .getDynamicLink(getIntent())
+                        .addOnCompleteListener(new OnCompleteListener<PendingDynamicLinkData>() {
+                            @Override
+                            public void onComplete(@NonNull Task<PendingDynamicLinkData> task) {
+
+                            }
+                        })
+                        .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
+                            @Override
+                            public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+
+
+                                Uri deepLink = pendingDynamicLinkData.getLink();
+                                Log.e(getClass().getSimpleName(), "DEEP LINK : " + deepLink.toString());
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+
+                 */
 
             }
         });
@@ -122,16 +190,6 @@ public class AuthActivity extends AppCompatActivity {
 
                 googleSignInClient = GoogleSignIn.getClient(AuthActivity.this, gso);
                 activityResultLauncher.launch(googleSignInClient.getSignInIntent());
-
-            }
-        });
-
-        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(AuthActivity.this, ChangePasswordActivity.class);
-                startActivity(intent);
 
             }
         });
@@ -154,11 +212,71 @@ public class AuthActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        Log.e(getClass().getSimpleName(), "RESUME");
+
         mAuth = FirebaseAuth.getInstance();
+        dynamicLinks = FirebaseDynamicLinks.getInstance();
+
+        dynamicLinks.getDynamicLink(getIntent())
+                .addOnCompleteListener(new OnCompleteListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onComplete(@NonNull Task<PendingDynamicLinkData> task) {
+
+                        Log.e(getClass().getSimpleName(), "COMPLETE");
+
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+
+                        if (pendingDynamicLinkData == null) return;
+
+                        Uri deepLink = pendingDynamicLinkData.getLink();
+                        if (deepLink == null) return;
+                        Log.e(getClass().getSimpleName(), "SUCCESS " + deepLink.toString());
+
+                        if (mAuth.isSignInWithEmailLink(deepLink.toString())) {
+                            Log.e(getClass().getSimpleName(), "IS SIGN");
+
+                            String email = emailField.getText().toString();
+
+                            mAuth.signInWithEmailLink(email, deepLink.toString())
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            Log.e(getClass().getSimpleName(), "SIGN COMPLETE");
+                                        }
+                                    })
+                                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+                                            Log.e(getClass().getSimpleName(), "SIGN SUCCESS");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e(getClass().getSimpleName(), "SIGN FAIL");
+                                        }
+                                    });
+
+                        } else {
+                            Log.e(getClass().getSimpleName(), "IS NOT SIGN");
+
+                        }
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(getClass().getSimpleName(), "FAIL");
+                    }
+                });
 
         String email = emailField.getText().toString();
-        String password = passwordField.getText().toString();
-        if (checkEmailFormat(email, password)) signEmail(email, password);
 
     }
 
@@ -206,13 +324,14 @@ public class AuthActivity extends AppCompatActivity {
             Log.e(getClass().getSimpleName(), "null");
             return;
         }
+        Log.e(getClass().getSimpleName(), "COMPLETE");
 
         RememberUDatabase db = RememberUDatabase.getInstance(AuthActivity.this);
         boolean isExist = db.userDao().isExist(user.getUid());
 
         if (!isExist) {
             db.userDao().insert(new User(user.getUid()));
-
+            Log.e(getClass().getSimpleName(), "COMPLETE");
         }
 
         SharedPreferencesManager.setUserEmail(AuthActivity.this, user.getEmail());
@@ -258,93 +377,16 @@ public class AuthActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkEmailFormat(String email, String password) {
+    private boolean checkEmailFormat(String email) {
 
         if (email.length() == 0) {
-
-            return false;
-        }
-
-        if (password.length() == 0) {
-
+            Log.e(getClass().getSimpleName(), "COMPLETE");
             return false;
         }
 
         return true;
     }
 
-    private void signEmail(String email, String password) {
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        Log.e(getClass().getSimpleName(), "SIGN COMPLETE");
-
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-
-                        FirebaseUser user = authResult.getUser();
-
-                        if (user == null) return;
-                        Log.e(getClass().getSimpleName(), "SIGN SUCCESS : " + user.getUid());
-                        if (user.isEmailVerified()) {
-
-
-                            updateUI(user);
-
-                        } else {
-
-                            user.sendEmailVerification();
-
-
-                        }
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                        Log.e(getClass().getSimpleName(), "SIGN FAIL");
-                        createEmailAccount(email, password);
-
-                    }
-                });
-
-
-    }
-
-    private void createEmailAccount(String email, String password) {
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        Log.e(getClass().getSimpleName(), "CREATE COMPLETE");
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-
-                        Log.e(getClass().getSimpleName(), "CREATE SUCCESS");
-
-                        if (checkEmailFormat(email, password)) signEmail(email, password);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                        Log.e(getClass().getSimpleName(), "CREATE FAIL");
-                    }
-                });
-    }
 
 }

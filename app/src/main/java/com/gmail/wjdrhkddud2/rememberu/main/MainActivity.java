@@ -280,6 +280,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        if (SharedPreferencesManager.getUID(MainActivity.this) == null) {
+
+            Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+            startActivity(intent);
+            finish();
+
+            return;
+
+        }
+
         Thread thread = new Thread() {
             @Override
             public void run() {

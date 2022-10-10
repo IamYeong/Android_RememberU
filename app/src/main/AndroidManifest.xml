@@ -21,13 +21,32 @@
         <activity android:name=".detail.DetailActivity" />
         <activity android:name=".add.NewPersonActivity" />
         <activity android:name=".setting.SettingActivity" />
-        <activity android:name=".auth.AuthActivity" />
+        <activity android:name=".auth.AuthActivity"
+            android:exported="true"
+            >
+
+            <intent-filter
+                android:autoVerify="true"
+                >
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="rememberu.com"
+                    android:scheme="https"/>
+
+                <data
+                    android:host="rememberu.com"
+                    android:scheme="http"/>
+
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

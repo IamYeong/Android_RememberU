@@ -66,6 +66,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private TextView accountNameText, accountEmailText;
+    private TextView logoutText;
     private ConstraintLayout settingLayout, readContactLayout, uploadLayout, downloadLayout;
 
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -83,6 +84,20 @@ public class SettingActivity extends AppCompatActivity {
         settingLayout = findViewById(R.id.layout_setting);
         uploadLayout = findViewById(R.id.layout_upload_setting);
         downloadLayout = findViewById(R.id.layout_download_setting);
+        logoutText = findViewById(R.id.tv_logout_setting);
+
+        logoutText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferencesManager.setUserEmail(SettingActivity.this, null);
+                SharedPreferencesManager.setUserEmailPassword(SettingActivity.this, null);
+                SharedPreferencesManager.setUserName(SettingActivity.this, null);
+                SharedPreferencesManager.setUID(SettingActivity.this, null);
+                finish();
+
+            }
+        });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
